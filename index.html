@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDOLL — Love at first boot</title>
+    <meta name="description" content="IDOLL is an emotionally intelligent home companion. Join the waitlist at idoll.love." />
+    <meta property="og:title" content="IDOLL — Love at first boot" />
+    <meta property="og:description" content="Emotionally intelligent home companion. Join the waitlist." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://idoll.love" />
+    <meta property="og:image" content="https://idoll.love/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tailwind Play CDN (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"],
+            },
+            boxShadow: {
+              glow: "0 0 0 2px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.35)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Subtle animated gradient background */
+      .bg-aurora {
+        background: radial-gradient(1200px 800px at 10% 10%, rgba(255, 94, 247, 0.25), transparent 40%),
+                    radial-gradient(900px 600px at 90% 20%, rgba(0, 164, 255, 0.20), transparent 40%),
+                    radial-gradient(1000px 700px at 50% 100%, rgba(255, 196, 0, 0.18), transparent 40%),
+                    linear-gradient(180deg, #0b0f17 0%, #121826 100%);
+        animation: aurora 20s ease-in-out infinite alternate;
+      }
+      
+      @keyframes aurora {
+        0% { 
+          background-position: 10% 10%, 90% 20%, 50% 100%;
+        }
+        100% { 
+          background-position: 20% 20%, 80% 30%, 60% 90%;
+        }
+      }
+      
+      .blur-card { 
+        backdrop-filter: blur(20px); 
+        -webkit-backdrop-filter: blur(20px); 
+      }
+      
+      .glass-morphism {
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      
+      .fade-in {
+        animation: fadeIn 1s ease-out;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .glow-pulse {
+        animation: glowPulse 3s ease-in-out infinite;
+      }
+      
+      @keyframes glowPulse {
+        0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+        50% { box-shadow: 0 0 40px rgba(255,255,255,0.2), 0 0 60px rgba(255,94,247,0.1); }
+      }
+      
+      .feature-card {
+        transition: all 0.3s ease;
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      }
+      
+      .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      }
+      
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(255,94,247,0.5), rgba(0,164,255,0.5), rgba(255,196,0,0.5));
+        border-radius: inherit;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+      }
+
+      /* Logo styling */
+      .idoll-logo {
+        height: 2.5rem;
+        width: auto;
+        filter: brightness(1.1) contrast(1.05);
+        transition: all 0.3s ease;
+      }
+      
+      .idoll-logo:hover {
+        filter: brightness(1.2) contrast(1.1);
+        transform: scale(1.02);
+      }
+      
+      .hero-logo {
+        height: 6rem;
+        width: auto;
+        filter: brightness(1.1) drop-shadow(0 4px 20px rgba(255,255,255,0.15));
+        animation: logoFloat 8s ease-in-out infinite;
+      }
+      
+      .footer-logo {
+        height: 2rem;
+        width: auto;
+        filter: brightness(1.1);
+        transition: all 0.3s ease;
+      }
+      
+      .footer-logo:hover {
+        filter: brightness(1.2);
+        transform: scale(1.05);
+      }
+      
+      @keyframes logoFloat {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-8px) scale(1.02); }
+      }
+      
+      /* Enhanced visual elements */
+      .logo-glow {
+        position: relative;
+      }
+      
+      .logo-glow::before {
+        content: '';
+        position: absolute;
+        inset: -30px;
+        background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: glowRotate 20s linear infinite;
+      }
+      
+      @keyframes glowRotate {
+        0% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(180deg) scale(1.1); }
+        100% { transform: rotate(360deg) scale(1); }
+      }
+    </style>
+  </head>
+  <body class="min-h-dvh bg-aurora text-white">
+    <!-- Header -->
+    <header class="max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between fade-in">
+      <div class="flex items-center gap-3">
+        <img src="logo-white.png" alt="IDOLL" class="idoll-logo" />
+      </div>
+      <nav class="text-sm text-white/70 hidden sm:flex gap-8">
+        <a href="#features" class="hover:text-white transition-colors duration-300 hover:scale-105 transform">Why IDOLL</a>
+        <a href="#join" class="hover:text-white transition-colors duration-300 hover:scale-105 transform">Waitlist</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <main class="max-w-6xl mx-auto px-5 pt-16 pb-20">
+      <section class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="fade-in">
+          <div class="inline-flex items-center gap-2 rounded-full glass-morphism px-4 py-2 text-xs text-white/90 mb-6">
+            <span class="size-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+            Coming soon on <strong class="font-semibold bg-gradient-to-r from-emerald-300 to-emerald-200 bg-clip-text text-transparent">idoll.love</strong>
+          </div>
+          
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight">
+            The companion that 
+            <span class="bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 bg-clip-text text-transparent">remembers</span>,
+            <span class="bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">empathizes</span>, and
+            <span class="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-300 bg-clip-text text-transparent">connects</span>.
+          </h1>
+          
+          <p class="mt-6 text-white/80 text-xl leading-relaxed">
+            IDOLL is a small home robot with a big heart—private on-device AI with cloud superpowers. 
+            Join the waitlist to get early access to pilots, drops, and limited editions.
+          </p>
+
+          <!-- Enhanced Form -->
+          <div id="join" class="mt-10">
+            <div class="gradient-border rounded-3xl p-8 glass-morphism">
+              <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-4" action="/thank-you">
+                <input type="hidden" name="form-name" value="waitlist" />
+                <p class="hidden">
+                  <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <input required type="email" name="email" placeholder="Enter your email" class="flex-1 rounded-2xl bg-black/40 border border-white/20 px-6 py-4 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-400/50 focus:border-pink-400/50 transition-all duration-300" />
+                  <button type="submit" class="rounded-2xl px-8 py-4 font-bold bg-gradient-to-r from-pink-500 to-violet-500 hover:from-pink-400 hover:to-violet-400 text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Join waitlist
+                  </button>
+                </div>
+
+                <div class="text-xs text-white/60 mt-3">By joining, you agree to receive updates. No spam, ever.</div>
+              </form>
+            </div>
+          </div>
+
+          <div class="mt-6 text-sm text-white/70">
+            Prefer Google Forms? <a href="#" onclick="toggleGF(event)" class="underline hover:text-white transition-colors">Use the Google Form embed</a>.
+          </div>
+        </div>
+
+        <!-- Enhanced Visual with Real Logo -->
+        <div class="relative floating">
+          <div class="absolute -inset-8 bg-gradient-to-tr from-pink-400/20 via-sky-400/15 to-amber-300/15 rounded-3xl blur-3xl"></div>
+          <div class="relative">
+            <div class="gradient-border rounded-3xl p-8 glass-morphism glow-pulse">
+              <div class="aspect-square rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent grid place-items-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-blue-500/10 rounded-2xl"></div>
+                <div class="text-center relative z-10 logo-glow">
+                  <img src="logo-white.png" alt="IDOLL" class="hero-logo mx-auto mb-4" />
+                  <p class="text-white/90 font-medium text-lg">Love at first boot</p>
+                  <div class="mt-6 flex justify-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></div>
+                    <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse" style="animation-delay: 0.2s"></div>
+                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" style="animation-delay: 0.4s"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Enhanced Features -->
+      <section id="features" class="mt-24">
+        <div class="text-center mb-12">
+          <img src="logo-white.png" alt="IDOLL" class="mx-auto mb-6 h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+          <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+            Why choose IDOLL?
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400/20 to-emerald-500/20 flex items-center justify-center mb-6">
+              <span class="text-2xl">🔒</span>
+            </div>
+            <h3 class="font-bold text-xl mb-3">Private by design</h3>
+            <p class="text-white/70 leading-relaxed">Sensitive audio/vision processed on-device. Cloud only for heavy lifting.</p>
+          </div>
+          
+          <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400/20 to-pink-500/20 flex items-center justify-center mb-6">
+              <span class="text-2xl">✨</span>
+            </div>
+            <h3 class="font-bold text-xl mb-3">Truly personal</h3>
+            <p class="text-white/70 leading-relaxed">Recognizes family members, remembers context, adapts gestures and tone.</p>
+          </div>
+          
+          <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400/20 to-cyan-500/20 flex items-center justify-center mb-6">
+              <span class="text-2xl">🇰🇷</span>
+            </div>
+            <h3 class="font-bold text-xl mb-3">Built in Korea</h3>
+            <p class="text-white/70 leading-relaxed">Designed and assembled with love. Limited pilot units first.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alt: Google Form Embed (optional) -->
+      <section id="google-form" class="mt-14 hidden">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
+          <!-- Replace the src with your Google Form's embed link -->
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf-placeholder/viewform?embedded=true" width="100%" height="720" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+        <p class="mt-2 text-xs text-white/60">Tip: In Google Forms, use <em>Send → Embed</em> and paste the link above.</p>
+      </section>
+
+      <!-- Enhanced Footer -->
+      <footer class="mt-32 py-12 text-center">
+        <div class="inline-block rounded-2xl glass-morphism px-8 py-4 border border-white/10">
+          <img src="logo-white.png" alt="IDOLL" class="footer-logo mx-auto mb-3" />
+          <p class="text-white/70 text-sm">
+            © <span id="year"></span> IDOLL Robotics — 
+            <a href="mailto:hello@idoll.love" class="text-white/90 underline hover:text-white transition-colors">hello@idoll.love</a>
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // Swap to Google Form embed
+      function toggleGF(e){
+        e.preventDefault();
+        document.getElementById('google-form').classList.remove('hidden');
+        document.getElementById('join').scrollIntoView({behavior:'smooth'});
+      }
+      // Year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
