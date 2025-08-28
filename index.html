@@ -271,10 +271,13 @@
       html, body {
         background-color: #0b0f17;
         overflow-x: hidden;
+        height: 100%;
       }
       
       body {
         position: relative;
+        padding-bottom: 0;
+        margin-bottom: 0;
       }
       
       /* Ensure background extends fully on mobile */
@@ -282,6 +285,27 @@
         min-height: 100vh;
         min-height: 100dvh;
         min-height: -webkit-fill-available;
+        background-attachment: local;
+      }
+      
+      /* Prevent over-scrolling on mobile */
+      @supports (-webkit-touch-callout: none) {
+        body {
+          overscroll-behavior-y: none;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+      
+      /* Ensure footer doesn't cause over-scroll */
+      footer {
+        position: relative;
+        z-index: 1;
+      }
+      
+      /* Prevent rubber band effect on iOS */
+      .bg-aurora {
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
       }
 
       /* Custom dropdown styling */
