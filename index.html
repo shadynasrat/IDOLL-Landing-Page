@@ -260,6 +260,140 @@
         .floating, .glow-pulse, .progress-dots { animation: none !important; }
       }
 
+      /* Custom dropdown styling */
+      .custom-select {
+        position: relative;
+      }
+
+      .custom-select select {
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1rem;
+        padding-right: 2.5rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .custom-select select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+      }
+
+      .custom-select select:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* Custom dropdown container */
+      .dropdown-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .dropdown-button {
+        width: 100%;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 0.75rem 1rem;
+        padding-right: 2.5rem;
+        outline: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1rem;
+      }
+
+      .dropdown-button:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      .dropdown-button:focus {
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+      }
+
+      .dropdown-button.active {
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+      }
+
+      .dropdown-button.active .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        margin-top: 0.25rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(135deg, rgba(18, 24, 38, 0.95), rgba(11, 15, 23, 0.98));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 4px 20px rgba(0, 0, 0, 0.2);
+        max-height: 200px;
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.95);
+        transition: all 0.2s ease;
+      }
+
+      .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .dropdown-option {
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .dropdown-option:last-child {
+        border-bottom: none;
+      }
+
+      .dropdown-option:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+        color: white;
+        transform: translateX(4px);
+      }
+
+      .dropdown-option.selected {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+        color: white;
+      }
+
+      /* Hide scrollbar for dropdown */
+      .dropdown-menu::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .dropdown-menu {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
     </style>
   </head>
   <body class="min-h-dvh bg-aurora text-white">
@@ -371,7 +505,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Private by design</h3>
             <p class="text-white/70 leading-relaxed">Sensitive audio/vision processed on-device. Cloud only for heavy lifting.</p>
-            <div class="mt-4 text-xs text-emerald-300">✓ Privacy-first architecture confirmed</div>
+            <!-- <div class="mt-4 text-xs text-emerald-300">✓ Privacy-first architecture confirmed</div> -->
           </div>
           
           <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
@@ -380,7 +514,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Truly personal</h3>
             <p class="text-white/70 leading-relaxed">Recognizes family members, remembers context, adapts gestures and tone.</p>
-            <div class="mt-4 text-xs text-purple-300">🔍 AI capabilities under development</div>
+            <!-- <div class="mt-4 text-xs text-purple-300">🔍 AI capabilities under development</div> -->
           </div>
           
           <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
@@ -389,7 +523,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Built in Korea</h3>
             <p class="text-white/70 leading-relaxed">Designed and assembled with love. Limited pilot units first.</p>
-            <div class="mt-4 text-xs text-blue-300">🏭 Manufacturing partner secured</div>
+            <!-- <div class="mt-4 text-xs text-blue-300">🏭 Manufacturing partner secured</div> -->
           </div>
         </div>
       </section>
@@ -432,25 +566,37 @@
             </div>
             <div>
               <label for="hear" class="block text-sm text-white/70 mb-1">How did you hear about us?</label>
-              <select id="hear" name="hear" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 outline-none focus:ring-2 focus:ring-white/50">
-                <option>Twitter/X</option>
-                <option>Instagram</option>
-                <option>Friend</option>
-                <option>Press</option>
-                <option>Other</option>
-              </select>
+              <div class="dropdown-container">
+                <button type="button" class="dropdown-button" id="hear-button" data-dropdown="hear">
+                  <span class="dropdown-text">Select an option</span>
+                </button>
+                <div class="dropdown-menu" id="hear-menu">
+                  <div class="dropdown-option" data-value="Twitter/X">Twitter/X</div>
+                  <div class="dropdown-option" data-value="Instagram">Instagram</div>
+                  <div class="dropdown-option" data-value="Friend">Friend</div>
+                  <div class="dropdown-option" data-value="Press">Press</div>
+                  <div class="dropdown-option" data-value="Other">Other</div>
+                </div>
+                <input type="hidden" name="hear" id="hear" />
+              </div>
             </div>
           </div>
           <div>
             <label for="interest" class="block text-sm text-white/70 mb-1">What interests you most?</label>
-            <select id="interest" name="interest" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 outline-none focus:ring-2 focus:ring-white/50">
-              <option>Home companionship</option>
-              <option>On‑device AI and privacy</option>
-              <option>Accessibility and care</option>
-              <option>Family routines</option>
-              <option>Developer platform</option>
-              <option>Investor / partnership</option>
-            </select>
+            <div class="dropdown-container">
+              <button type="button" class="dropdown-button" id="interest-button" data-dropdown="interest">
+                <span class="dropdown-text">Select an option</span>
+              </button>
+              <div class="dropdown-menu" id="interest-menu">
+                <div class="dropdown-option" data-value="Home companionship">Home companionship</div>
+                <div class="dropdown-option" data-value="On‑device AI and privacy">On‑device AI and privacy</div>
+                <div class="dropdown-option" data-value="Accessibility and care">Accessibility and care</div>
+                <div class="dropdown-option" data-value="Family routines">Family routines</div>
+                <div class="dropdown-option" data-value="Developer platform">Developer platform</div>
+                <div class="dropdown-option" data-value="Investor / partnership">Investor / partnership</div>
+              </div>
+              <input type="hidden" name="interest" id="interest" />
+            </div>
           </div>
           <div class="flex items-start gap-3">
             <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-white/20 bg-white/10" />
@@ -475,14 +621,94 @@
 
 
 <script>
+      // Custom dropdown functionality
+      function initDropdowns() {
+        const dropdowns = document.querySelectorAll('.dropdown-container');
+        
+        dropdowns.forEach(dropdown => {
+          const button = dropdown.querySelector('.dropdown-button');
+          const menu = dropdown.querySelector('.dropdown-menu');
+          const options = dropdown.querySelectorAll('.dropdown-option');
+          const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+          const textSpan = button.querySelector('.dropdown-text');
+          
+          // Toggle dropdown
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-menu.show').forEach(otherMenu => {
+              if (otherMenu !== menu) {
+                otherMenu.classList.remove('show');
+                otherMenu.parentElement.querySelector('.dropdown-button').classList.remove('active');
+              }
+            });
+            
+            // Toggle current dropdown
+            menu.classList.toggle('show');
+            button.classList.toggle('active');
+          });
+          
+          // Handle option selection
+          options.forEach(option => {
+            option.addEventListener('click', (e) => {
+              e.stopPropagation();
+              
+              const value = option.getAttribute('data-value');
+              const text = option.textContent;
+              
+              // Update hidden input
+              hiddenInput.value = value;
+              
+              // Update button text
+              textSpan.textContent = text;
+              textSpan.style.color = 'white';
+              
+              // Update selected state
+              options.forEach(opt => opt.classList.remove('selected'));
+              option.classList.add('selected');
+              
+              // Close dropdown
+              menu.classList.remove('show');
+              button.classList.remove('active');
+            });
+          });
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.dropdown-container')) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+              menu.classList.remove('show');
+              menu.parentElement.querySelector('.dropdown-button').classList.remove('active');
+            });
+          }
+        });
+        
+        // Close dropdowns on escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+              menu.classList.remove('show');
+              menu.parentElement.querySelector('.dropdown-button').classList.remove('active');
+            });
+          }
+        });
+      }
+
       // Swap to Google Form embed
       function toggleGF(e){
         e.preventDefault();
         document.getElementById('google-form').classList.remove('hidden');
         document.getElementById('join').scrollIntoView({behavior:'smooth'});
       }
+      
       // Year
       document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Initialize dropdowns when page loads
+      document.addEventListener('DOMContentLoaded', initDropdowns);
     </script>
   </body>
 </html>
