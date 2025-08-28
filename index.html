@@ -167,13 +167,91 @@
         50% { transform: rotate(180deg) scale(1.1); }
         100% { transform: rotate(360deg) scale(1); }
       }
+
+      /* Robot silhouette styling */
+      .robot-silhouette {
+        filter: brightness(1) saturate(0);
+      }
+            
+      @keyframes mysterySway {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-5px) rotate(1deg); }
+      }
+      
+      .mystery-overlay {
+        background: linear-gradient(45deg, 
+          rgba(0,0,0,0.9) 0%, 
+          rgba(0,0,0,0.7) 30%, 
+          rgba(0,0,0,0.8) 70%, 
+          rgba(0,0,0,0.9) 100%);
+        backdrop-filter: blur(1px);
+      }
+      
+      .reveal-hint {
+        animation: pulseHint 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulseHint {
+        0%, 100% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+      }
+      
+      .static-effect {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .static-effect::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: 
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 98px,
+            rgba(255,255,255,0.03) 100px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 98px,
+            rgba(255,255,255,0.03) 100px
+          );
+        animation: staticNoise 0.5s linear infinite;
+        pointer-events: none;
+      }
+      
+      @keyframes staticNoise {
+        0% { transform: translate(0, 0); }
+        10% { transform: translate(-1px, 1px); }
+        20% { transform: translate(1px, -1px); }
+        30% { transform: translate(-1px, -1px); }
+        40% { transform: translate(1px, 1px); }
+        50% { transform: translate(-1px, 1px); }
+        60% { transform: translate(1px, -1px); }
+        70% { transform: translate(-1px, -1px); }
+        80% { transform: translate(1px, 1px); }
+        90% { transform: translate(-1px, 1px); }
+        100% { transform: translate(0, 0); }
+      }
+      
+      .progress-dots {
+        animation: progressLoad 3s ease-in-out infinite;
+      }
+      
+      @keyframes progressLoad {
+        0%, 20% { opacity: 0.3; }
+        50% { opacity: 1; }
+        80%, 100% { opacity: 0.3; }
+      }
     </style>
   </head>
   <body class="min-h-dvh bg-aurora text-white">
     <!-- Header -->
     <header class="max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between fade-in">
       <div class="flex items-center gap-3">
-        <img src="logo-white.png" alt="IDOLL" class="idoll-logo" />
+        <img src="src/logo-white.png" alt="IDOLL" class="idoll-logo" />
       </div>
       <nav class="text-sm text-white/70 hidden sm:flex gap-8">
         <a href="#features" class="hover:text-white transition-colors duration-300 hover:scale-105 transform">Why IDOLL</a>
@@ -186,8 +264,8 @@
       <section class="grid md:grid-cols-2 gap-12 items-center">
         <div class="fade-in">
           <div class="inline-flex items-center gap-2 rounded-full glass-morphism px-4 py-2 text-xs text-white/90 mb-6">
-            <span class="size-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-            Coming soon on <strong class="font-semibold bg-gradient-to-r from-emerald-300 to-emerald-200 bg-clip-text text-transparent">idoll.love</strong>
+            <span class="size-2 rounded-full bg-amber-400 inline-block animate-pulse"></span>
+            <span class="text-amber-200">Pre-reveal</span> • Coming soon on <strong class="font-semibold bg-gradient-to-r from-emerald-300 to-emerald-200 bg-clip-text text-transparent">idoll.love</strong>
           </div>
           
           <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight">
@@ -222,42 +300,75 @@
               </form>
             </div>
           </div>
-
-          <div class="mt-6 text-sm text-white/70">
-            Prefer Google Forms? <a href="#" onclick="toggleGF(event)" class="underline hover:text-white transition-colors">Use the Google Form embed</a>.
-          </div>
         </div>
 
-        <!-- Enhanced Visual with Real Logo -->
-        <div class="relative floating">
-          <div class="absolute -inset-8 bg-gradient-to-tr from-pink-400/20 via-sky-400/15 to-amber-300/15 rounded-3xl blur-3xl"></div>
+        <!-- Mystery Robot Visual -->
+        <div class="relative floating robot-container">
+          <div class="absolute -inset-8 bg-gradient-to-tr from-amber-400/15 via-red-400/10 to-purple-400/15 rounded-3xl blur-3xl"></div>
           <div class="relative">
-            <div class="gradient-border rounded-3xl p-8 glass-morphism glow-pulse">
-              <div class="aspect-square rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent grid place-items-center relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-blue-500/10 rounded-2xl"></div>
-                <div class="text-center relative z-10 logo-glow">
-                  <img src="logo-white.png" alt="IDOLL" class="hero-logo mx-auto mb-4" />
-                  <p class="text-white/90 font-medium text-lg">Love at first boot</p>
-                  <div class="mt-6 flex justify-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></div>
-                    <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse" style="animation-delay: 0.2s"></div>
-                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" style="animation-delay: 0.4s"></div>
+            <div class="gradient-border rounded-3xl p-8 glass-morphism glow-pulse static-effect">
+              <div class="aspect-square rounded-2xl bg-gradient-to-br from-black/100 via-black/100 to-black/100 grid place-items-center relative overflow-hidden mystery-overlay">
+            
+            <!-- Robot Silhouette -->
+            <div class="relative z-20"></div>
+              <img src="src/robot-silhouette.png" alt="IDOLL Robot - Coming Soon" class="robot-silhouette h-96 w-auto mx-auto" />
+            </div>
+            
+                <!-- Mystery Elements -->
+                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center">
+                  <div class="absolute top-4 right-4 reveal-hint">
+                    <div class="text-xs text-amber-300 bg-black/60 px-2 py-1 rounded-lg border border-amber-400/30">
+                      🔒 CLASSIFIED
+                    </div>
+                  </div>
+                  
+                  <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
+                    <p class="text-white/90 font-medium text-sm mb-2">Full reveal coming soon</p>
+                    <div class="flex gap-1 justify-center">
+                      <div class="w-2 h-2 rounded-full bg-amber-400 progress-dots"></div>
+                      <div class="w-2 h-2 rounded-full bg-amber-400 progress-dots" style="animation-delay: 0.3s"></div>
+                      <div class="w-2 h-2 rounded-full bg-amber-400 progress-dots" style="animation-delay: 0.6s"></div>
+                    </div>
+                  </div>
+                  
+                  <!-- Scan Lines Effect -->
+                  <div class="absolute inset-0 opacity-20">
+                    <div class="h-full w-full bg-gradient-to-b from-transparent via-black/40 to-transparent animate-pulse"></div>
                   </div>
                 </div>
+                
+                <!-- Corner Details -->
+                <div class="absolute top-3 left-3 z-30">
+                  <div class="text-xs text-cyan-300 font-mono">ID-001</div>
+                </div>
+                <div class="absolute bottom-3 right-3 z-30">
+                  <div class="text-xs text-green-300 font-mono">STATUS: PENDING</div>
+                </div>
               </div>
+            </div>
+          </div>
+          
+          <!-- Hype Text Below -->
+          <div class="mt-6 text-center">
+            <p class="text-sm text-white/70 mb-2">First look at IDOLL's design</p>
+            <div class="inline-flex items-center gap-2 text-xs text-amber-300">
+              <span class="size-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              Join the waitlist for exclusive early access
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Enhanced Features -->
+      <!-- Enhanced Features with Teasers -->
       <section id="features" class="mt-24">
         <div class="text-center mb-12">
-          <img src="logo-white.png" alt="IDOLL" class="mx-auto mb-6 h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
-          <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+          <img src="src/logo-white.png" alt="IDOLL" class="mx-auto mb-6 h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+          <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent mb-4">
             Why choose IDOLL?
           </h2>
+          <p class="text-white/60 text-sm">More details revealed as we approach launch</p>
         </div>
+        
         <div class="grid md:grid-cols-3 gap-8">
           <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400/20 to-emerald-500/20 flex items-center justify-center mb-6">
@@ -265,6 +376,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Private by design</h3>
             <p class="text-white/70 leading-relaxed">Sensitive audio/vision processed on-device. Cloud only for heavy lifting.</p>
+            <div class="mt-4 text-xs text-emerald-300">✓ Privacy-first architecture confirmed</div>
           </div>
           
           <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
@@ -273,6 +385,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Truly personal</h3>
             <p class="text-white/70 leading-relaxed">Recognizes family members, remembers context, adapts gestures and tone.</p>
+            <div class="mt-4 text-xs text-purple-300">🔍 AI capabilities under development</div>
           </div>
           
           <div class="feature-card rounded-3xl glass-morphism p-8 border border-white/10">
@@ -281,6 +394,7 @@
             </div>
             <h3 class="font-bold text-xl mb-3">Built in Korea</h3>
             <p class="text-white/70 leading-relaxed">Designed and assembled with love. Limited pilot units first.</p>
+            <div class="mt-4 text-xs text-blue-300">🏭 Manufacturing partner secured</div>
           </div>
         </div>
       </section>
@@ -297,7 +411,7 @@
       <!-- Enhanced Footer -->
       <footer class="mt-32 py-12 text-center">
         <div class="inline-block rounded-2xl glass-morphism px-8 py-4 border border-white/10">
-          <img src="logo-white.png" alt="IDOLL" class="footer-logo mx-auto mb-3" />
+          <img src="src/logo-white.png" alt="IDOLL" class="footer-logo mx-auto mb-3" />
           <p class="text-white/70 text-sm">
             © <span id="year"></span> IDOLL Robotics — 
             <a href="mailto:hello@idoll.love" class="text-white/90 underline hover:text-white transition-colors">hello@idoll.love</a>
