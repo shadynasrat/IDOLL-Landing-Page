@@ -82,6 +82,13 @@
     --color-border-muted: #4d4d4d;
 }
 
+/* Set the actual page background to use the card background color */
+html, body {
+    background-color: var(--card-bg);
+    background: var(--card-bg);
+    min-height: 100%;
+}
+
 /* Minimal utility classes (bootstrap-like) used by markup */
 .d-flex { display: flex; }
 .align-items-center { align-items: center; }
