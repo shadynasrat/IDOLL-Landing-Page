@@ -92,33 +92,39 @@ function initIdollApp() {
     // Directly add click handlers to ensure functionality
     if (burgerBtn) {
         burgerBtn.addEventListener('click', function(ev) {
-            // Desktop: toggle sidebar. Mobile: open slide-over menu.
-            if (window.innerWidth >= 1024) {
-                ev.stopPropagation();
-                document.body.classList.toggle('sidebar-open');
-                try { localStorage.setItem('sidebarOpen', document.body.classList.contains('sidebar-open') ? '1' : '0'); } catch {}
-            } else {
-                mobileMenu.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        });
-
-        document.addEventListener('click', function(event) {
+            // Use the same dynamic sidebar for both desktop and mobile
+            ev.stopPropagation();
+            document.body.classList.toggle('sidebar-open');
+            try { localStorage.setItem('sidebarOpen', document.body.classList.contains('sidebar-open') ? '1' : '0'); } catch {}
+            
+            // On mobile, also handle body overflow for better UX
             if (window.innerWidth < 1024) {
-                if (mobileMenu && !mobileMenu.contains(event.target) && !burgerBtn.contains(event.target)) {
-                    mobileMenu.classList.remove('active');
+                if (document.body.classList.contains('sidebar-open')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
                     document.body.style.overflow = '';
                 }
             }
         });
-    }
-    
-    if(closeBtn) {
-        closeBtn.addEventListener('click', function() {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = '';
+
+        document.addEventListener('click', function(event) {
+            // Close sidebar when clicking outside on any screen size
+            const conversationDrawer = document.querySelector('.conversation-drawer');
+            if (conversationDrawer && !conversationDrawer.contains(event.target) && !burgerBtn.contains(event.target)) {
+                document.body.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+                try { localStorage.setItem('sidebarOpen', '0'); } catch {}
+            }
         });
     }
+    
+    // Close button is no longer needed since we use the dynamic drawer
+    // if(closeBtn) {
+    //     closeBtn.addEventListener('click', function() {
+    //         mobileMenu.classList.remove('active');
+    //         document.body.style.overflow = '';
+    //     });
+    // }
 
 
     const themeToggleBtn = document.getElementById('theme-toggle-btn');

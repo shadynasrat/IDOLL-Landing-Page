@@ -328,7 +328,7 @@ h6{
     transition:left .3s ease;
     width:250px;
     z-index:99999;
-    display:flex;
+    display:none; /* Hide old mobile menu - now using dynamic drawer */
     flex-direction:column;
     overflow-x:hidden;
     overflow-y:hidden}
@@ -400,6 +400,33 @@ h6{
     body.sidebar-open .chat-header{ left: var(--sidebar-width); }
     body.sidebar-open .chat-container{ left: var(--sidebar-width); }
     body.sidebar-open .chat-input-container{ left: var(--sidebar-width); }
+}
+
+/* Mobile sidebar behavior - overlay style */
+@media (max-width: 1023px){
+    body.sidebar-open .conversation-drawer{ 
+        left: 0; 
+        z-index: 99999; /* Higher than header */
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    /* Add overlay background on mobile */
+    body.sidebar-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99998;
+        pointer-events: auto;
+    }
+    
+    /* Don't shift content on mobile - use overlay */
+    body.sidebar-open .chat-header{ left: 0; }
+    body.sidebar-open .chat-container{ left: 0; }
+    body.sidebar-open .chat-input-container{ left: 0; }
 }
 
 /* Drawer header (New Chat button) */
