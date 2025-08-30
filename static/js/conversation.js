@@ -332,25 +332,43 @@ function renderUserProfile(drawer) {
         if (!card) {
             card = document.createElement('div');
             card.className = 'user-profile-card';
-            // basic layout; rely on existing CSS vars for colors
-            card.style.marginTop = '12px';
-            card.style.padding = '10px';
-            card.style.borderTop = '1px solid var(--border-color)';
-            card.style.display = 'flex';
-            card.style.alignItems = 'center';
-            card.style.gap = '10px';
+            // layout handled via CSS class in static/style.css
             drawer.appendChild(card);
         }
         const avatar = profile.picture || '/static/idoll_avatar.png';
         const name = profile.name || profile.email || profile.user_id || 'User';
         const email = profile.email || '';
+        const isDark = (localStorage.getItem('theme') === 'dark');
+        const icon = isDark ? 'fa-sun' : 'fa-moon';
         card.innerHTML = `
           <img src="${avatar}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border-color)" onerror="this.src='/static/idoll_avatar.png'"/>
           <div style="display:flex;flex-direction:column;">
             <span style="font-size:0.9rem;">${name}</span>
-            ${email ? `<span style="font-size:0.75rem;opacity:0.7;">${email}</span>` : ''}
+            ${email ? `<span style=\"font-size:0.75rem;opacity:0.7;\">${email}</span>` : ''}
+          </div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+            <button id="theme-toggle-side-btn" title="Toggle theme" style="background:transparent;border:1px solid var(--border-color);color:var(--text-muted);border-radius:10px;padding:6px;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;">
+              <i class=\"fas ${icon}\"></i>
+            </button>
           </div>
         `;
+
+        // Wire up theme toggle on the side card
+        const sideBtn = card.querySelector('#theme-toggle-side-btn');
+        if (sideBtn) {
+          sideBtn.addEventListener('click', () => {
+            if (typeof window.toggleTheme === 'function') {
+              window.toggleTheme();
+              // Update icon after toggle
+              const nowDark = (localStorage.getItem('theme') === 'dark');
+              const i = sideBtn.querySelector('i');
+              if (i){
+                i.classList.remove('fa-sun','fa-moon');
+                i.classList.add(nowDark ? 'fa-sun' : 'fa-moon');
+              }
+            }
+          });
+        }
     } catch (e) {
         console.warn('Failed to render user profile card', e);
     }

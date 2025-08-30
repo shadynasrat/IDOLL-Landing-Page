@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>IDOLL Interface</title>
+    <!-- API base is configured in static/js/config.js; avoid hardcoding to keep cookies first-party via Netlify proxy -->
+    <!-- Tailwind (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: ['class', '[data-theme="dark"]'],
+        theme: { extend: { colors: { ink:'#121826', night:'#0b0f17' } } }
+      };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/idoll_avatar.png" type="image/x-icon">
+</head>
+<body class="dark-theme bg-night text-white">
+    <!-- Optional override to force WS to ngrok while proxy is adjusted -->
+    <script>
+      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
+    </script>
+    <script type="module" src="./static/js/config.js"></script>
+    <div class="layout-container">
+        <div class="chat-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="d-flex align-items-center">
+                    <button id="burger-menu-btn" class="btn btn-icon input-action-btn me-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-logo">
+                        <img src="/static/images/logo-white.png" alt="IDOLL" class="header-logo-img">
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="call-button" class="btn btn-icon call-btn" data-tooltip="Call">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button id="header-new-chat-btn" class="btn btn-icon input-action-btn me-1" data-tooltip="New chat">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages -->
+            <main id="chat-container" class="chat-container">
+                <!-- Chat main container -->
+                <div class="messages-wrapper">
+                    <div id="conversation-container">
+
+                    </div>
+                </div>
+                    <!-- Messages will be dynamically inserted here by JavaScript -->
+                </div>
+            </main>
+        </div>
+        
+        <!-- Fixed Chat Input at the bottom -->
+        <footer class="chat-input-container">
+            <div class="input-container-wrapper">
+                <div class="chat-input-group">
+                    <div class="chat-input-wrapper">
+                        <textarea class="chat-input" placeholder="Message IDOLL..."></textarea>
+                    </div>
+                    <div class="input-actions-bottom">
+                        <div class="left-buttons">
+                            <button id="upload-image-btn" class="btn btn-icon input-action-btn-circle" data-tooltip="Upload Files">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-icon input-action-btn-circle-text" data-tooltip="Search the web">
+                                <i class="fas fa-globe me-1"></i><span>Search</span>
+                            </button>
+                        </div>
+                        <div class="left-buttons">
+                            <button id="send-stt-message-btn" class="btn btn-icon input-action-btn-circle-send" data-tooltip="Dictate">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mic icon" class="h-[18px] w-[18px]" font-size="inherit"><path d="M18.9953 11.5415C19.5246 11.6991 19.826 12.2559 19.6685 12.7852C18.7771 15.7804 16.179 18.0417 13 18.4381V19.5H14.5C15.0523 19.5 15.5 19.9477 15.5 20.5C15.5 21.0523 15.0523 21.5 14.5 21.5H9.50002C8.94773 21.5 8.50002 21.0523 8.50002 20.5C8.50002 19.9477 8.94773 19.5 9.50002 19.5H11V18.4381C7.82093 18.0418 5.22279 15.7805 4.33136 12.7852C4.17382 12.2559 4.47522 11.6991 5.00456 11.5415C5.5339 11.384 6.09073 11.6854 6.24827 12.2148C6.98609 14.6939 9.28339 16.5 11.9999 16.5C14.7165 16.5 17.0138 14.6939 17.7516 12.2148C17.9091 11.6854 18.466 11.384 18.9953 11.5415Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 10.5V7C14.5 5.61929 13.3807 4.5 12 4.5C10.6193 4.5 9.5 5.61929 9.5 7V10.5C9.5 11.8807 10.6193 13 12 13C13.3807 13 14.5 11.8807 14.5 10.5ZM12 2.5C9.51472 2.5 7.5 4.51472 7.5 7V10.5C7.5 12.9853 9.51472 15 12 15C14.4853 15 16.5 12.9853 16.5 10.5V7C16.5 4.51472 14.4853 2.5 12 2.5Z" fill="currentColor"></path></svg>
+                            </button>
+                            <button id="send-message-btn" class="btn btn-icon input-action-btn-circle-send" data-tooltip="Send message">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="footer-disclaimer">
+                <span>IDOLL can make mistakes. Check important info.</span>
+            </div> -->
+        </footer>
+    </div>
+
+    <!-- Mobile navigation menu (hidden by default) -->
+    <div id="mobile-nav-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <button id="close-menu-btn" class="btn btn-icon input-action-btn me-2">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button id="theme-toggle-btn" class="btn btn-icon input-action-btn me-2">
+                <i class="fas fa-moon"></i>
+            </button>
+            <span id="connection-status" class="connection-status input-action-btn me-2">
+                <i class="fas fa-circle"></i>
+                <span id="latency-display" class="latency-text">-- ms</span>
+                <span id="speed-display" class="speed-text">↑ -- KB/s ↓ -- KB/s</span>
+            </span>
+        </div>
+        
+        <!-- Added conversations section to mobile menu -->
+        <div class="mobile-menu-sections">
+            <div class="mobile-menu-section" style="display:flex; flex-direction:column; min-height:0;">
+                <div id="mobile-conversations-list" class="chat-history-list">
+                    <!-- Conversations will be inserted here via JavaScript -->
+                    <div class="mobile-empty-state">
+                        <p>No conversations yet</p>
+                    </div>
+                </div>
+            </div>
+            <!-- User info button at the very bottom -->
+            <div class="user-menu-footer">
+              <div class="relative" style="padding-top:8px;">
+                <button id="user-info-btn" class="w-full rounded-xl px-2 py-2 hover:bg-white/10 text-left flex items-center gap-3" title="User menu">
+                  <div class="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center"><i class="fas fa-user"></i></div>
+                  <div class="min-w-0">
+                    <div class="text-[11px] text-white/60 leading-tight">Signed in as</div>
+                    <div id="user-info-name" class="text-sm font-medium truncate">User</div>
+                  </div>
+                  <i id="user-info-caret" class="fas fa-chevron-up ml-auto text-white/70"></i>
+                </button>
+                <div id="user-menu" class="hidden absolute right-0 bottom-[46px] w-48 bg-[#121826] text-white border border-white/10 rounded-xl shadow-2xl overflow-hidden z-[100000]">
+                  <a id="menu-settings" href="#" class="block px-3 py-2 text-sm hover:bg-white/10">Settings</a>
+                  <a id="menu-subscription" href="#" class="block px-3 py-2 text-sm hover:bg-white/10">Subscription</a>
+                  <div class="h-px bg-white/10"></div>
+                  <a id="menu-logout" href="#" class="block px-3 py-2 text-sm text-rose-300 hover:bg-white/10">Log out</a>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Call Modal (Tailwind overlay) -->
+    <div id="callModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60">
+      <div class="call-modal-content text-center max-w-sm w-full mx-4">
+        <div class="call-avatar">
+            <img src="static/idoll_avatar.png" alt="IDOLL" class="call-avatar-img">
+            <div class="call-pulsating-circle"></div>
+        </div>
+        <h4 class="call-name mt-3">IDOLL</h4>
+        <p class="call-status">Connecting...</p>
+        <div class="call-timer">00:00</div>
+        <div class="call-actions mt-4">
+          <button class="btn btn-icon call-action-btn btn-mute" title="Mute">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button id="end-call-button" class="btn btn-icon call-action-btn btn-end-call" title="End Call">
+            <i class="fas fa-phone-slash"></i>
+          </button>
+          <button class="btn btn-icon call-action-btn btn-speaker" title="Speaker">
+            <i class="fas fa-volume-up"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Modal (Tailwind overlay) -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img id="modalImage" src="" alt="Image Preview" class="img-fluid image-popup-preview">
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio element for call audio output -->
+    <audio id="call-audio-output" autoplay hidden></audio>
+
+
+    <script type="module">
+      // Local variant: always load the app without early-access gating.
+      import { API_BASE } from './static/js/config.js';
+
+      const apiFetch = (path, options = {}) => {
+        const url = path.startsWith('http') ? path : `${API_BASE}${path.startsWith('/') ? '' : '/'}${path}`;
+        return fetch(url, { credentials: 'include', ...options });
+      };
+
+      function initLogoutButtons(user){
+        const buttons = [document.getElementById('signout-btn')];
+        buttons.forEach(btn => {
+          if (!btn) return;
+          btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try { await apiFetch('/auth/logout', { method: 'POST' }); } catch {}
+            // On local page, just reload instead of redirecting to early-access.
+            window.location.reload();
+          });
+        });
+      }
+
+      function initUserMenu(user){
+        const name = user?.name || user?.email || (user?.user_id || 'User');
+        const nameEl = document.getElementById('user-info-name');
+        if (nameEl) nameEl.textContent = name;
+        const caret = document.getElementById('user-info-caret');
+        const menu = document.getElementById('user-menu');
+        const btn  = document.getElementById('user-info-btn');
+        const logoutItem = document.getElementById('menu-logout');
+
+        function closeMenu(){
+          menu?.classList.add('hidden');
+          caret?.classList.remove('fa-chevron-down');
+          caret?.classList.add('fa-chevron-up');
+        }
+        function toggleMenu(){
+          if (!menu) return;
+          const isHidden = menu.classList.contains('hidden');
+          if (isHidden){
+            menu.classList.remove('hidden');
+            caret?.classList.remove('fa-chevron-up');
+            caret?.classList.add('fa-chevron-down');
+          } else {
+            closeMenu();
+          }
+        }
+
+        btn?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); });
+        document.addEventListener('click', (e) => {
+          if (!(e.target instanceof Element)) return;
+          if (!e.target.closest('#user-menu') && !e.target.closest('#user-info-btn')) closeMenu();
+        });
+
+        logoutItem?.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await apiFetch('/auth/logout', { method: 'POST' }); } catch {}
+          window.location.reload();
+        });
+      }
+
+      (async () => {
+        // Create a local user profile with early_access role to bypass gating
+        const user = { user_id: 'local_dev', name: 'Local Dev', role: 'early_access' };
+        window.userProfile = user;
+        window.userId = user.user_id;
+
+        initLogoutButtons(user);
+        initUserMenu(user);
+
+        // Directly load the main application
+        await import('/static/main.js');
+      })();
+    </script>
+</body>
+</html>

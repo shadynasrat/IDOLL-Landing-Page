@@ -81,6 +81,12 @@
     --normal-font-size: 1.0rem;
     --color-border-muted: #4d4d4d;
 }
+
+/* Minimal utility classes (bootstrap-like) used by markup */
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.me-1 { margin-right: 0.25rem; }
+.me-2 { margin-right: 0.5rem; }
     
 h5{
     font-size:var(--text-menu-font-size);
@@ -383,7 +389,6 @@ h6{
     width: var(--sidebar-width);
     height: 100vh;
     background-color: var(--card-bg-dark-extra);
-    border-right: 1px solid var(--border-color);
     box-shadow: 0 0 20px rgba(0,0,0,0.25);
     z-index: 900; /* Below header/input which are 1000 */
     display: flex;
@@ -402,7 +407,7 @@ h6{
     body.sidebar-open .chat-input-container{ left: var(--sidebar-width); }
 }
 
-/* Mobile sidebar behavior - overlay style */
+/* Mobile sidebar behavior - shift style (match desktop) */
 @media (max-width: 1023px){
     /* Ensure drawer stacks above input/header on mobile at all times */
     .conversation-drawer{ z-index: 100001; }
@@ -411,24 +416,11 @@ h6{
         z-index: 100001; /* Above header/footer and overlays */
         box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
-    
-    /* Add overlay background on mobile */
-    body.sidebar-open::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.35); /* Slightly lighter dim */
-        z-index: 99998;
-        pointer-events: auto;
-    }
-    
-    /* Don't shift content on mobile - use overlay */
-    body.sidebar-open .chat-header{ left: 0; }
-    body.sidebar-open .chat-container{ left: 0; }
-    body.sidebar-open .chat-input-container{ left: 0; }
+
+    /* Shift content to the right when sidebar is open */
+    body.sidebar-open .chat-header{ left: var(--sidebar-width); }
+    body.sidebar-open .chat-container{ left: var(--sidebar-width); }
+    body.sidebar-open .chat-input-container{ left: var(--sidebar-width); }
 }
 
 /* Drawer header (New Chat button) */
@@ -490,7 +482,12 @@ h6{
 
 /* User profile card at bottom */
 .conversation-drawer .user-profile-card{
-    margin-top: 8px;
+    margin-top: 12px;
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
     /* Only the conversations list scrolls */
@@ -539,11 +536,6 @@ h6{
 
     
 .chat-input-container{
-    background: linear-gradient(135deg, rgba(18, 24, 38, 0.88), rgba(11, 15, 23, 0.92));
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.05);
     bottom:0;
     left:0;
     padding:16px 0 24px;
@@ -731,7 +723,6 @@ h6{
     margin:0 auto;
     max-width:100%; /* Set to full width to align scrollbar with screen edge */
     position: fixed;
-    /* top: 57px; adjust to match chat-header height */
     top: 0; /* Start from the top of the viewport */
     bottom: 80px; /* adjust to match input container height */
     left: 0;
@@ -772,11 +763,6 @@ h6{
     
     
     .chat-header{
-    background: linear-gradient(135deg, rgba(18, 24, 38, 0.92), rgba(11, 15, 23, 0.95));
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1);
     justify-content:space-between;
     left:0;
     padding:14px 20px;
@@ -785,7 +771,6 @@ h6{
     top:0;
     z-index:1000;
     transition: left .25s ease, background .3s ease;
-    border-radius: 0 0 16px 16px;
     margin: 0 8px;
     right: 8px;
     left: 8px;
@@ -1425,11 +1410,6 @@ h6{
     padding: 0;
     }
     
-    /* Preserve header visual style on mobile */
-    .chat-header{
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
     .avatar-icon{
     font-size:.75rem;
     height:20px;

@@ -150,3 +150,5 @@ window.switchToChat       = switchToChat;
 window.copyToClipboard    = copyToClipboard;
 window.markdownToHtml     = markdownToHtml;
 window.showConversationsPanel = showConversationsPanel;
+// expose theme toggle for dynamic UI (e.g., sidebar profile card)
+window.toggleTheme = toggleTheme;
