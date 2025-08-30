@@ -92,6 +92,7 @@ function stopGeneration() {
 // Initialize WebSocket connection
 export function initializeWebSocket() {
     const wsUrl = window.IDOLL_WS || (location.origin.replace(/^http/, 'ws') + '/ws');
+    try { console.log('[IDOLL] Connecting WS to:', wsUrl); } catch {}
     
     try {
         window.wsConnection = new WebSocket(wsUrl);
