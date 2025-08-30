@@ -4,7 +4,7 @@ export function inputBox_functions() {
     const captureImageBtn = document.getElementById('capture-image-btn');
     const chatInputWrapper = document.querySelector('.chat-input-wrapper');
     const images = document.querySelectorAll('.message-image img');
-    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    const imageModalEl = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
 
     // Event delegation for image clicks to handle dynamically inserted images
@@ -12,8 +12,20 @@ export function inputBox_functions() {
         const target = e.target;
         if (target.matches('.message-image img')) {
             console.log('Image clicked, opening modal with src:', target.src);
-            modalImage.src = target.src;
-            modal.show();
+            if (modalImage) modalImage.src = target.src;
+            if (imageModalEl) imageModalEl.classList.remove('hidden');
+        }
+    });
+
+    // Close image modal on backdrop click or Escape
+    if (imageModalEl) {
+        imageModalEl.addEventListener('click', (e) => {
+            if (e.target === imageModalEl) imageModalEl.classList.add('hidden');
+        });
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && imageModalEl && !imageModalEl.classList.contains('hidden')) {
+            imageModalEl.classList.add('hidden');
         }
     });
 
@@ -28,6 +40,7 @@ export function inputBox_functions() {
         const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
         return fetch(`${base}/upload_file/${window.userId}/${window.currentChatId}`, {
             method: 'POST',
+            credentials: 'include',
             body: formData
         })
         .then(response => {

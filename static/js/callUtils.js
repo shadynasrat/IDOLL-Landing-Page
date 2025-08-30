@@ -3,20 +3,41 @@ import { sendVadAudio } from "./websocket.js";
 export function setupCallButton() {
     const callButton = document.getElementById('call-button');
     const modalElement = document.getElementById('callModal');
-    const callModal = new bootstrap.Modal(modalElement);
     const endCallButton = document.getElementById('end-call-button');
     let mediaRecorder = null;
     let callTimer = null;
     let callDuration = 0;
 
-    callButton.addEventListener('click', async () => {
-        callModal.show();
-        startTimer();
-        await startRecording();
-    });
+    function showModal() {
+        if (modalElement) modalElement.classList.remove('hidden');
+    }
+    function hideModal() {
+        if (modalElement) modalElement.classList.add('hidden');
+        stopCall();
+    }
 
-    if (endCallButton) endCallButton.addEventListener('click', stopCall);
-    modalElement.addEventListener('hidden.bs.modal', stopCall);
+    if (callButton) {
+        callButton.addEventListener('click', async () => {
+            showModal();
+            startTimer();
+            await startRecording();
+        });
+    }
+
+    if (endCallButton) endCallButton.addEventListener('click', hideModal);
+
+    // Close when clicking backdrop
+    if (modalElement) {
+        modalElement.addEventListener('click', (e) => {
+            if (e.target === modalElement) hideModal();
+        });
+    }
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalElement && !modalElement.classList.contains('hidden')) {
+            hideModal();
+        }
+    });
 
     function startTimer() {
         const timerElement = document.querySelector('.call-timer');
@@ -79,7 +100,7 @@ export function setupCallButton() {
 
         } catch (error) {
             console.error('Error starting audio recording:', error);
-            if (modalElement) modalElement.hide();
+            hideModal();
             alert('Failed to access microphone. Please check permissions.');
         }
     }

@@ -75,7 +75,7 @@ function toggleSideTab(sideTab) {
         sideTab.classList.add('active');
         // Load user data when the side tab is shown
         const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
-        fetch(`${base}/memory/${userId}`)
+        fetch(`${base}/memory/${userId}`, { credentials: 'include' })
             .then(response => response.json())
             .then(data => {
                 updateMemoryUI(data['memory_data']);
@@ -108,6 +108,37 @@ function setupEventListeners(userBtn, sideTab) {
             sideTab.classList.remove('active');
         });
     }
+    
+    // Lightweight tabs (no Bootstrap)
+    const tabButtons = sideTab.querySelectorAll('.side-tab-navigation .nav-link');
+    const panes = [
+        sideTab.querySelector('#users-content'),
+        sideTab.querySelector('#expressions-content'),
+        sideTab.querySelector('#agents-content')
+    ].filter(Boolean);
+    // Initialize visibility
+    panes.forEach((pane, idx) => {
+        if (idx === 0) {
+            pane.classList.remove('hidden');
+        } else {
+            pane.classList.add('hidden');
+        }
+    });
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Activate button
+            tabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // Show target pane
+            const target = btn.getAttribute('data-bs-target');
+            panes.forEach(p => p && p.classList.add('hidden'));
+            if (target) {
+                const pane = sideTab.querySelector(target);
+                pane?.classList.remove('hidden');
+            }
+        });
+    });
     
     // Close the side tab when clicking outside of it, only if it's open
     document.addEventListener('click', function(event) {
@@ -336,5 +367,3 @@ function updateTabBadge(tabId, count) {
         badge.style.display = count > 0 ? 'inline-block' : 'none';
     }
 }
-
-

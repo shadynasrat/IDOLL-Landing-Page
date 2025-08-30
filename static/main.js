@@ -1,4 +1,4 @@
-import { loadChatHistory, loadConversation, switchToChat } from './js/conversation.js';
+import { loadChatHistory, loadConversation, switchToChat, showConversationsPanel } from './js/conversation.js';
 import { initializeWebSocket } from './js/websocket.js';
 import { setupCallButton } from './js/callUtils.js';
 import {
@@ -15,9 +15,9 @@ import { PlaySound } from './js/audio_helpers.js';
 import { markdownToHtml } from './js/renderHelpers.js';
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    let currentChatId = 'default_chat';
-    let userId        = 'default_user';
+function initIdollApp() {
+    const currentChatId = window.currentChatId || 'default_chat';
+    const userId        = window.userId || 'default_user';
 
     window.sendButton = document.getElementById('send-message-btn');
     window.is_generating = false;
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupScrollObserver();
     setupMobileMenu();
+    // Load chat history; it will auto-select a chat or show welcome
     loadChatHistory();
     initializeWebSocket();
     setupMobileChatInterface();
@@ -92,12 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize chat history on page load
-    loadChatHistory();
-    
-    // Load initial conversation (default)
-    loadConversation(currentChatId);
-});
+    // Do not force-load a conversation here; loadChatHistory will handle selection
+}
+
+// Run immediately if the DOM is already parsed (dynamic imports may occur after DOMContentLoaded)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initIdollApp);
+} else {
+  initIdollApp();
+}
 
 
 
@@ -106,7 +110,5 @@ window.loadConversation   = loadConversation;
 window.switchToChat       = switchToChat;
 window.copyToClipboard    = copyToClipboard;
 window.markdownToHtml     = markdownToHtml;
-
-
-
+window.showConversationsPanel = showConversationsPanel;
 

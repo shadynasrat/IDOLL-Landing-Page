@@ -32,19 +32,27 @@ export function loadConversation(chatId) {
         conversationContainer.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> Loading conversation...</div>';
     }
     
-    // Fetch the conversation data from the server
     const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
-    fetch(`${base}/conversation/${window.userId}/${window.currentChatId}`)
-        .then(response => response.json())
-        .then(data => {
-            updateConversationUI(data);
-        })
-        .catch(error => {
-            console.error(`Error loading conversation ${window.currentChatId}:`, error);
-            if (conversationContainer) {
-                conversationContainer.innerHTML = '<div class="error-message">Error loading conversation. Please try again.</div>';
-            }
-        });
+    fetch(`${base}/conversation/${window.userId}/${window.currentChatId}`, { credentials: 'include' })
+      .then(async (response) => {
+        if (!response.ok) {
+          // Graceful fallback: show welcome if no conversation exists yet
+          showWelcomeIfFirstConversation(conversationContainer);
+          throw new Error('HTTP ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data && Array.isArray(data.conversation)) {
+          updateConversationUI(data);
+        } else {
+          showWelcomeIfFirstConversation(conversationContainer);
+        }
+      })
+      .catch(error => {
+        // Already handled above; keep console for debugging
+        console.warn(`Conversation load fallback for ${window.currentChatId}:`, error?.message || error);
+      });
 }
 
 
@@ -128,7 +136,7 @@ export function loadChatHistory() {
     
     // First try to fetch conversation data from the server
     const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
-    fetch(`${base}/conversations/${window.userId}`)
+    fetch(`${base}/conversations/${window.userId}`, { credentials: 'include' })
         .then(response => response.json())
         .then (data => {
             if (data.conversations && Array.isArray(data.conversations)) {
@@ -136,12 +144,12 @@ export function loadChatHistory() {
                 // Update our chat history data with the server data
                 chatHistoryData = data.conversations;
                 
-                // If we don't have any conversations yet, create a default one
+                // If none, create a friendly welcome placeholder
                 if (chatHistoryData.length === 0) {
                     chatHistoryData.push({
-                        id: 'general',
-                        title: 'General Conversation',
-                        lastMessage: 'No messages yet',
+                        id: 'welcome',
+                        title: 'Welcome to IDOLL',
+                        lastMessage: 'Start a new conversation',
                         timestamp: new Date().toISOString()
                     });
                 }
@@ -155,12 +163,12 @@ export function loadChatHistory() {
                 }
             } else {
                 console.log("No valid conversations data received, using default");
-                // Use default conversation data
+                // Use default placeholder
                 if (chatHistoryData.length === 0) {
                     chatHistoryData.push({
-                        id: 'general',
-                        title: 'General Conversation',
-                        lastMessage: 'No messages yet',
+                        id: 'welcome',
+                        title: 'Welcome to IDOLL',
+                        lastMessage: 'Start a new conversation',
                         timestamp: new Date().toISOString()
                     });
                 }
@@ -174,12 +182,12 @@ export function loadChatHistory() {
         })
         .catch(error => {
             console.error("Error fetching conversations:", error);
-            // Use default conversation data on error
+            // Use default placeholder on error
             if (chatHistoryData.length === 0) {
                 chatHistoryData.push({
-                    id: 'general',
-                    title: 'General Conversation',
-                    lastMessage: 'No messages yet',
+                    id: 'welcome',
+                    title: 'Welcome to IDOLL',
+                    lastMessage: 'Start a new conversation',
                     timestamp: new Date().toISOString()
                 });
             }
@@ -231,14 +239,87 @@ export function displayChatHistory() {
         conversationDrawer.appendChild(chatHistoryList);
     }
     
-    
+    // Populate desktop chat list
+    if (chatHistoryList) {
+        chatHistoryList.innerHTML = '';
+        if (chatHistoryData.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-state';
+            empty.textContent = 'No conversations yet';
+            chatHistoryList.appendChild(empty);
+        } else {
+            chatHistoryData.forEach(chat => {
+                const item = document.createElement('div');
+                item.className = 'chat-history-item' + (chat.id === window.currentChatId ? ' active' : '');
+                item.setAttribute('data-chat-id', chat.id);
+                item.innerHTML = `
+                    <div class="chat-history-title">${chat.title || chat.id}</div>
+                    <div class="chat-history-preview">${chat.lastMessage || ''}</div>
+                `;
+                item.addEventListener('click', () => switchToChat(chat.id));
+                chatHistoryList.appendChild(item);
+            });
+        }
+    }
+
     // Also update the mobile list if it exists
     const mobileList = document.getElementById('mobile-conversations-list');
     if (mobileList) {
         displayMobileConversations(mobileList);
     }
     
+    // Render current user profile at the bottom of the drawer
+    renderUserProfile(conversationDrawer);
+
     console.log("Chat history displayed successfully");
+}
+
+function showWelcomeIfFirstConversation(container) {
+    if (!container) return;
+    if (window.currentChatId !== 'welcome') {
+      // Not the placeholder; show minimal empty state
+      container.innerHTML = '<div class="empty-state">No messages yet. Say hi to IDOLL!</div>';
+      return;
+    }
+    container.innerHTML = `
+      <div class="welcome-card">
+        <h3>Welcome to IDOLL</h3>
+        <p>Start a new conversation by typing below. Your recent chats will appear here.</p>
+      </div>
+    `;
+}
+
+function renderUserProfile(drawer) {
+    try {
+        if (!drawer) return;
+        const profile = (window.userProfile || {});
+        if (!profile || (!profile.name && !profile.email)) return;
+        let card = drawer.querySelector('.user-profile-card');
+        if (!card) {
+            card = document.createElement('div');
+            card.className = 'user-profile-card';
+            // basic layout; rely on existing CSS vars for colors
+            card.style.marginTop = '12px';
+            card.style.padding = '10px';
+            card.style.borderTop = '1px solid var(--border-color)';
+            card.style.display = 'flex';
+            card.style.alignItems = 'center';
+            card.style.gap = '10px';
+            drawer.appendChild(card);
+        }
+        const avatar = profile.picture || '/static/idoll_avatar.png';
+        const name = profile.name || (profile.email || 'User');
+        const email = profile.email || '';
+        card.innerHTML = `
+          <img src="${avatar}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border-color)" onerror="this.src='/static/idoll_avatar.png'"/>
+          <div style="display:flex;flex-direction:column;">
+            <span style="font-size:0.9rem;">${name}</span>
+            ${email ? `<span style="font-size:0.75rem;opacity:0.7;">${email}</span>` : ''}
+          </div>
+        `;
+    } catch (e) {
+        console.warn('Failed to render user profile card', e);
+    }
 }
 
 

@@ -196,9 +196,11 @@ export function createChatOnServer(initialMessage) {
     console.log("Creating new chat on server with initial_message:", initialMessage);
     const requestBody = { initial_message: initialMessage };
     const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
-    fetch(`${base}/create_chat/${window.userId}/${initialMessage}`, {
+    const encodedMsg = encodeURIComponent(initialMessage || '');
+    fetch(`${base}/create_chat/${window.userId}/${encodedMsg}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(requestBody),
     })
     .then(res => res.json())
@@ -261,11 +263,7 @@ export function setupMobileChatInterface() {
             // Hide conversations panel (this is for mobile view)
             const conversationsPanel = document.getElementById('conversations-panel');
             if (conversationsPanel) {
-                const tabElement = document.querySelector('button[data-bs-target="#users-panel"]');
-                if (tabElement) {
-                    const bsTab = new bootstrap.Tab(tabElement);
-                    bsTab.show();
-                }
+                // No-op without Bootstrap; panel visibility handled elsewhere
             }
         });
     }
@@ -278,11 +276,7 @@ export function setupMobileChatInterface() {
             
             // Show users panel if it's not already shown
             if (window.innerWidth >= 992) {
-                const tabElement = document.querySelector('button[data-bs-target="#users-panel"]');
-                if (tabElement) {
-                    const bsTab = new bootstrap.Tab(tabElement);
-                    bsTab.show();
-                }
+                // No-op without Bootstrap; panel visibility handled elsewhere
             }
         });
     }
@@ -362,7 +356,7 @@ export function setupMobileChatInterface() {
             e.stopPropagation(); // Prevent event bubbling to collapse toggle
             
             // Show conversations panel
-            showConversationsPanel();
+            window.showConversationsPanel?.();
             
             // Logic to create a new chat would go here
             console.log('Creating new chat');

@@ -2,16 +2,12 @@ import { setupMobileMenu, setupMobileChatInterface, createNewChat } from './uiUt
 // import { setupCallButton } from './callUtils.js';
 
 
-// Initial load
-window.addEventListener('load', function() {
-    // Restore the last active tab
+function initChatUI() {
+    // Restore the last active tab (no Bootstrap)
     const activeTab = localStorage.getItem('activeTab');
     if (activeTab) {
         const tab = document.querySelector(`#${activeTab}`);
-        if (tab) {
-            const bsTab = new bootstrap.Tab(tab);
-            bsTab.show();
-        }
+        tab?.classList.add('active');
     }
     
     // Setup mobile menu functionality
@@ -59,31 +55,19 @@ window.addEventListener('load', function() {
         });
     }
     
-    // Create a hidden tab button for the conversations panel
-    const hiddenTabButton = document.createElement('button');
-    hiddenTabButton.setAttribute('id', 'hidden-conversations-tab-button');
-    hiddenTabButton.setAttribute('data-bs-toggle', 'tab');
-    hiddenTabButton.setAttribute('data-bs-target', '#conversations-panel');
-    hiddenTabButton.style.display = 'none';
-    document.body.appendChild(hiddenTabButton);
+    // Removed Bootstrap hidden tab button (no longer needed)
     
     // Add click event to conversations-tab to show the conversations panel
     const conversationsTab = document.getElementById('conversations-tab');
     if (conversationsTab) {
         // When the conversations tab is clicked, also select the first conversation
         conversationsTab.addEventListener('click', function() {
-            const tabElement = document.querySelector('button[data-bs-target="#conversations-panel"]');
-            if (tabElement) {
-                const bsTab = new bootstrap.Tab(tabElement);
-                bsTab.show();
-                
-                // Make sure we have a chat selected
-                const firstChatItem = document.querySelector('.conversation-drawer .chat-history-item');
-                if (firstChatItem) {
-                    const chatId = firstChatItem.getAttribute('data-chat-id');
-                    if (chatId) {
-                        switchToChat(chatId);
-                    }
+            // Make sure we have a chat selected
+            const firstChatItem = document.querySelector('.conversation-drawer .chat-history-item');
+            if (firstChatItem) {
+                const chatId = firstChatItem.getAttribute('data-chat-id');
+                if (chatId) {
+                    switchToChat(chatId);
                 }
             }
         });
@@ -94,7 +78,7 @@ window.addEventListener('load', function() {
         item.addEventListener('click', function() {
             const chatId = this.getAttribute('data-chat-id');
             switchToChat(chatId);
-            showConversationsPanel();
+            window.showConversationsPanel?.();
             
             // Log for debugging
             console.log(`Initial chat clicked: ${chatId}`);
@@ -108,7 +92,7 @@ window.addEventListener('load', function() {
         conversationsTab.addEventListener('click', function() {
             // Also directly show the conversations panel after a short delay
             setTimeout(() => {
-                showConversationsPanel();
+                window.showConversationsPanel?.();
                 
                 // Select the first conversation
                 const firstChatItem = document.querySelector('.conversation-drawer .chat-history-item');
@@ -132,7 +116,7 @@ window.addEventListener('load', function() {
                 const chatId = firstChatItem.getAttribute('data-chat-id');
                 if (chatId) {
                     switchToChat(chatId);
-                    showConversationsPanel();
+                    window.showConversationsPanel?.();
                 }
             }
         }, 200);
@@ -165,7 +149,14 @@ window.addEventListener('load', function() {
     
     // Make sure scroll happens after initial load
     setTimeout(() => scrollToLastMessage(), 300);
-});
+}
+
+// Initialize even when this module is imported after window load
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(initChatUI, 0);
+} else {
+  window.addEventListener('load', initChatUI);
+}
 
 // Function to scroll to the last message in the chat container
 export function scrollToLastMessage() {
