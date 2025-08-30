@@ -84,14 +84,21 @@
           <div id="already-approved" class="hidden mt-3 text-emerald-300 text-sm">
             Access already granted on this device. <a href="./webapp.html" class="underline">Continue to IDOLL</a>.
           </div>
-          <div class="mt-3">
+          <!-- Method Toggle -->
+          <div class="mt-4 inline-flex rounded-full bg-white/10 border border-white/20 p-1" role="tablist" aria-label="Access method">
+            <button id="method-google" type="button" class="px-3 py-1.5 text-sm rounded-full hover:bg-white/10 focus:outline-none">Google</button>
+            <button id="method-email" type="button" class="px-3 py-1.5 text-sm rounded-full hover:bg-white/10 focus:outline-none">Email</button>
+          </div>
+
+          <!-- Google Sign-In block -->
+          <div id="google-signin-block" class="mt-3">
             <div id="google-btn"></div>
-            <p class="text-xs text-white/50 mt-2">Sign in with Google to autofill your email and speed up access.</p>
+            <p class="text-xs text-white/50 mt-2">Sign in with Google, then enter your invite code.</p>
           </div>
           <form id="invite-form" class="mt-4 space-y-3">
-            <div>
+            <div id="email-block">
               <label for="email" class="block text-sm mb-1">Email</label>
-              <input id="email" name="email" type="email" required placeholder="you@example.com" class="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/40" />
+              <input id="email" name="email" type="email" placeholder="you@example.com" class="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/40" />
             </div>
             <div>
               <label for="code" class="block text-sm mb-1">Invite code</label>
@@ -123,6 +130,51 @@
         error.textContent = 'Early access required. Please enter your invite code or request access.';
         error.classList.remove('hidden');
       }
+
+      // Access method toggle logic
+      document.addEventListener('DOMContentLoaded', () => {
+        const methodGoogleBtn = document.getElementById('method-google');
+        const methodEmailBtn = document.getElementById('method-email');
+        const googleBlock = document.getElementById('google-signin-block');
+        const emailBlock = document.getElementById('email-block');
+        const emailInput = document.getElementById('email');
+        let userChose = false;
+
+        function setActive(btn) {
+          [methodGoogleBtn, methodEmailBtn].forEach(b => b.classList.remove('bg-white','text-ink'));
+          btn.classList.add('bg-white','text-ink');
+        }
+
+        function chooseGoogle() {
+          googleBlock.style.display = '';
+          emailBlock.style.display = 'none';
+          emailInput.removeAttribute('required');
+          setActive(methodGoogleBtn);
+        }
+
+        function chooseEmail() {
+          googleBlock.style.display = 'none';
+          emailBlock.style.display = '';
+          emailInput.setAttribute('required','true');
+          setActive(methodEmailBtn);
+        }
+
+        methodGoogleBtn.addEventListener('click', () => { userChose = true; chooseGoogle(); });
+        methodEmailBtn.addEventListener('click', () => { userChose = true; chooseEmail(); });
+
+        // Default to Email; if Google client ID is available, switch to Google unless user already chose
+        chooseEmail();
+        (async () => {
+          try {
+            if (window.IDOLL_GOOGLE_CLIENT_ID) { if (!userChose) chooseGoogle(); return; }
+            const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+            const resp = await fetch(base + '/auth/google/client-id', { credentials: 'include' });
+            if (!resp.ok) return;
+            const { client_id } = await resp.json();
+            if (client_id && !userChose) chooseGoogle();
+          } catch {}
+        })();
+      });
     </script>
   </body>
 </html>
