@@ -186,11 +186,11 @@
         const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
         return fetch(url, { credentials: 'include', ...options });
       };
-      const redeemInvite = async (email, code) => {
+      const redeemInvite = async (code) => {
         const res = await apiFetch('/invite/redeem', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, code, idToken: window.idollGoogleToken || null })
+          body: JSON.stringify({ code })
         });
         return res.json();
       };
@@ -228,9 +228,8 @@
             e.preventDefault();
             error.classList.add('hidden');
             const code = normalize(codeInput.value);
-            const email = user.email || '';
             try {
-              const out = await redeemInvite(email, code);
+              const out = await redeemInvite(code);
               if (out && out.ok) {
                 // Refresh session then load app
                 const s2 = await apiFetch('/auth/session').then(r=>r.json()).catch(()=>sess);

@@ -13,11 +13,11 @@ async function getSession() {
   } catch { return { authenticated: false }; }
 }
 
-async function redeemInvite(email, code) {
+async function redeemInvite(code) {
   const res = await apiFetch('/invite/redeem', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, code, idToken: window.idollGoogleToken || null })
+    body: JSON.stringify({ code })
   });
   return await res.json();
 }
@@ -40,9 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     error?.classList?.add('hidden');
-    const email = document.getElementById('email').value.trim();
     const code = normalizeCode(document.getElementById('code').value);
-    const res = await redeemInvite(email, code);
+    const res = await redeemInvite(code);
     if (res.ok) { redirectToApp(); return; }
     error.textContent = 'Invite failed: ' + (res.error || 'unknown_error');
     error.classList.remove('hidden');
@@ -77,11 +76,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (emailInput) { emailInput.value = payload.email; emailInput.readOnly = true; }
               }
             } catch {}
-            // Also create a session cookie on server for convenience
+            // Also create a session cookie on server then go to app
             apiFetch('/auth/google/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ idToken: window.idollGoogleToken })
+            }).then(r => r.json()).then(resp => {
+              if (resp && resp.ok) {
+                redirectToApp();
+              }
             }).catch(()=>{});
           }
         });

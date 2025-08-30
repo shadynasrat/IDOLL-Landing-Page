@@ -81,8 +81,8 @@
           <div id="already-approved" class="hidden mt-3 text-emerald-300 text-sm">
             Access already granted on this device. <a href="./webapp.html" class="underline">Continue to IDOLL</a>.
           </div>
-          <!-- Method Toggle -->
-          <div class="mt-4 inline-flex rounded-full bg-white/10 border border-white/20 p-1" role="tablist" aria-label="Access method">
+          <!-- Method Toggle (disabled: require sign-in first) -->
+          <div class="mt-4 inline-flex rounded-full bg-white/10 border border-white/20 p-1 hidden" role="tablist" aria-label="Access method">
             <button id="method-google" type="button" class="px-3 py-1.5 text-sm rounded-full hover:bg-white/10 focus:outline-none">Google</button>
             <button id="method-email" type="button" class="px-3 py-1.5 text-sm rounded-full hover:bg-white/10 focus:outline-none">Email</button>
           </div>
@@ -92,7 +92,8 @@
             <div id="google-btn"></div>
             <p class="text-xs text-white/50 mt-2">Sign in with Google, then enter your invite code.</p>
           </div>
-          <form id="invite-form" class="mt-4 space-y-3">
+          <!-- Invite form is now handled inside webapp overlay after sign-in -->
+          <form id="invite-form" class="mt-4 space-y-3 hidden">
             <div id="email-block">
               <label for="email" class="block text-sm mb-1">Email</label>
               <input id="email" name="email" type="email" placeholder="you@example.com" class="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/40" />
@@ -124,12 +125,11 @@
           const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
           const res = await fetch(base + '/auth/session', { credentials: 'include' });
           const sess = await res.json();
-          // Only auto-redirect if already fully approved
-          if (sess && sess.authenticated && sess.user && sess.user.role === 'early_access') {
+          // If signed in (any role), go to webapp; it will handle invite code gating
+          if (sess && sess.authenticated) {
             window.location.href = '/webapp.html';
             return;
           }
-          // Otherwise stay here so user can enter invite code or sign in
         } catch {}
       })();
 
