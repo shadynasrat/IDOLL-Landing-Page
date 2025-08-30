@@ -3,7 +3,6 @@ import { initializeWebSocket } from './js/websocket.js';
 import { setupCallButton } from './js/callUtils.js';
 import {
   setupScrollObserver,
-  setupMobileMenu,
   copyToClipboard,
   setupMobileChatInterface
 } from './js/uiUtils.js';
@@ -28,13 +27,12 @@ function initIdollApp() {
     window.userId = userId;
     window.currentChatId = currentChatId;
 
-    setupScrollObserver();
-    setupMobileMenu();
-    // Load chat history; it will auto-select a chat or show welcome
-    loadChatHistory();
-    initializeWebSocket();
-    setupMobileChatInterface();
-    initializeUserSideTab();
+  setupScrollObserver();
+  // Load chat history; it will auto-select a chat or show welcome
+  loadChatHistory();
+  initializeWebSocket();
+  setupMobileChatInterface();
+  initializeUserSideTab();
     setupCallButton();
     inputBox_functions(); 
 

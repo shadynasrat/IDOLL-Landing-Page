@@ -1,4 +1,4 @@
-import { setupMobileMenu, setupMobileChatInterface, createNewChat, scrollToLastMessage } from './uiUtils.js';
+import { setupMobileChatInterface, createNewChat, scrollToLastMessage } from './uiUtils.js';
 // import { setupCallButton } from './callUtils.js';
 
 
@@ -9,9 +9,6 @@ function initChatUI() {
         const tab = document.querySelector(`#${activeTab}`);
         tab?.classList.add('active');
     }
-    
-    // Setup mobile menu functionality
-    setupMobileMenu();
     
     // Setup mobile chat interface
     setupMobileChatInterface();

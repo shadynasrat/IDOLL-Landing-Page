@@ -22,6 +22,24 @@ async function redeemInvite(code) {
   return await res.json();
 }
 
+async function signupWithEmail(email, password, inviteCode) {
+  const res = await apiFetch('/auth/email/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, invite_code: inviteCode })
+  });
+  return await res.json();
+}
+
+async function signinWithEmail(email, password) {
+  const res = await apiFetch('/auth/email/signin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  return await res.json();
+}
+
 function normalizeCode(c){ return (c || '').trim(); }
 
 function redirectToApp(){ window.location.href = '/webapp.html'; }
@@ -37,14 +55,66 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Handle invite form
   const form = document.getElementById('invite-form');
   const error = document.getElementById('error');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const codeInput = document.getElementById('code');
+  const submitBtn = document.getElementById('email-submit-btn');
+  const toggleSignin = document.getElementById('toggle-signin');
+  const passwordBlock = document.getElementById('password-block');
+  
+  let isSignupMode = true;
+  
+  function toggleMode() {
+    isSignupMode = !isSignupMode;
+    if (isSignupMode) {
+      submitBtn.textContent = 'Sign up & Continue';
+      toggleSignin.textContent = 'Already have an account? Sign in';
+      passwordInput.placeholder = 'Create a secure password';
+      codeInput.required = true;
+      codeInput.parentElement.style.display = '';
+    } else {
+      submitBtn.textContent = 'Sign in';
+      toggleSignin.textContent = 'Need an account? Sign up';
+      passwordInput.placeholder = 'Enter your password';
+      codeInput.required = false;
+      codeInput.parentElement.style.display = 'none';
+    }
+  }
+  
+  toggleSignin?.addEventListener('click', toggleMode);
+  
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     error?.classList?.add('hidden');
-    const code = normalizeCode(document.getElementById('code').value);
-    const res = await redeemInvite(code);
-    if (res.ok) { redirectToApp(); return; }
-    error.textContent = 'Invite failed: ' + (res.error || 'unknown_error');
-    error.classList.remove('hidden');
+    
+    const email = emailInput?.value;
+    const password = passwordInput?.value;
+    const code = normalizeCode(codeInput?.value);
+    
+    try {
+      let res;
+      if (isSignupMode) {
+        if (!code) {
+          error.textContent = 'Invite code is required for signup';
+          error.classList.remove('hidden');
+          return;
+        }
+        res = await signupWithEmail(email, password, code);
+      } else {
+        res = await signinWithEmail(email, password);
+      }
+      
+      if (res.ok) { 
+        redirectToApp(); 
+        return; 
+      }
+      
+      error.textContent = (isSignupMode ? 'Signup' : 'Signin') + ' failed: ' + (res.error || 'unknown_error');
+      error.classList.remove('hidden');
+    } catch (err) {
+      error.textContent = 'Connection error. Please try again.';
+      error.classList.remove('hidden');
+    }
   });
 
   // Google Sign-In bootstrap (optional)

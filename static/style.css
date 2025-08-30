@@ -328,7 +328,7 @@ h6{
     transition:left .3s ease;
     width:250px;
     z-index:99999;
-    display:none; /* Hide old mobile menu - now using dynamic drawer */
+    display:none !important; /* Force-hide old mobile menu – dynamic drawer replaces it */
     flex-direction:column;
     overflow-x:hidden;
     overflow-y:hidden}
@@ -404,9 +404,11 @@ h6{
 
 /* Mobile sidebar behavior - overlay style */
 @media (max-width: 1023px){
+    /* Ensure drawer stacks above input/header on mobile at all times */
+    .conversation-drawer{ z-index: 100001; }
     body.sidebar-open .conversation-drawer{ 
         left: 0; 
-        z-index: 99999; /* Higher than header */
+        z-index: 100001; /* Above header/footer and overlays */
         box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
     
@@ -418,7 +420,7 @@ h6{
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.35); /* Slightly lighter dim */
         z-index: 99998;
         pointer-events: auto;
     }
@@ -1405,8 +1407,9 @@ h6{
     .chat-input-group{
     margin:10px 10px}
     
+    /* Keep desktop styling for input container on mobile for visual parity */
     .chat-input-container{
-    padding:0 0 10px}
+    padding:16px 0 24px}
     
     .chat-container{
     height:calc(100vh - 100px);
@@ -1422,8 +1425,9 @@ h6{
     padding: 0;
     }
     
+    /* Preserve header visual style on mobile */
     .chat-header{
-    border-bottom: var(--border-color) 0.25px solid;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .avatar-icon{
