@@ -422,9 +422,24 @@
   </head>
   <body class="bg-aurora text-white">
     <script>
-      // Point frontend to your API and WS (adjust if you change domains)
-      window.IDOLL_API_BASE = 'https://idoll.ngrok.app/api';
-      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
+      // Point frontend to your API and WS (auto-detect ngrok vs local)
+      (function(){
+        const host = location.hostname;
+        if (!window.IDOLL_API_BASE) {
+          if (host.includes('ngrok.app')) {
+            window.IDOLL_API_BASE = 'https://api-idoll.ngrok.app/api';
+          } else {
+            window.IDOLL_API_BASE = '/api';
+          }
+        }
+        if (!window.IDOLL_WS) {
+          if (host.includes('ngrok.app')) {
+            window.IDOLL_WS = 'wss://api-idoll.ngrok.app/ws';
+          } else {
+            window.IDOLL_WS = location.origin.replace(/^http/, 'ws') + '/ws';
+          }
+        }
+      })();
     </script>
     <!-- Header -->
     <header class="max-w-6xl mx-auto px-5 pt-4 top-0 z-50">

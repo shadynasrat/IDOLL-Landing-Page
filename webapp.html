@@ -20,8 +20,23 @@
 <body class="dark-theme bg-night text-white">
     <script>
       // Ensure API base and WS URL are configured when hosting separately
-      window.IDOLL_API_BASE = window.IDOLL_API_BASE || 'https://idoll.ngrok.app/api';
-      window.IDOLL_WS = window.IDOLL_WS || 'wss://idoll.ngrok.app/ws';
+      (function(){
+        const host = location.hostname;
+        if (!window.IDOLL_API_BASE) {
+          if (host.includes('ngrok.app')) {
+            window.IDOLL_API_BASE = 'https://api-idoll.ngrok.app/api';
+          } else {
+            window.IDOLL_API_BASE = '/api';
+          }
+        }
+        if (!window.IDOLL_WS) {
+          if (host.includes('ngrok.app')) {
+            window.IDOLL_WS = 'wss://api-idoll.ngrok.app/ws';
+          } else {
+            window.IDOLL_WS = location.origin.replace(/^http/, 'ws') + '/ws';
+          }
+        }
+      })();
     </script>
     <div class="layout-container">
         <div class="chat-container">

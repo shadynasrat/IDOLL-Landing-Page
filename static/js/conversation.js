@@ -274,6 +274,24 @@ export function displayChatHistory() {
     console.log("Chat history displayed successfully");
 }
 
+// Realtime: upsert a conversation summary (id, title, lastMessage, timestamp)
+export function upsertConversationSummary(summary) {
+    if (!summary || !summary.id) return;
+    const idx = chatHistoryData.findIndex(c => c.id === summary.id);
+    if (idx >= 0) {
+        chatHistoryData[idx] = { ...chatHistoryData[idx], ...summary };
+    } else {
+        chatHistoryData.unshift({ id: summary.id, title: summary.title || 'New Chat', lastMessage: summary.lastMessage || '', timestamp: summary.timestamp || new Date().toISOString() });
+    }
+    displayChatHistory();
+}
+
+// Realtime: remove a conversation by id
+export function removeConversationSummary(chatId) {
+    chatHistoryData = chatHistoryData.filter(c => c.id !== chatId);
+    displayChatHistory();
+}
+
 function showWelcomeIfFirstConversation(container) {
     if (!container) return;
     if (window.currentChatId !== 'welcome') {
@@ -293,7 +311,7 @@ function renderUserProfile(drawer) {
     try {
         if (!drawer) return;
         const profile = (window.userProfile || {});
-        if (!profile || (!profile.name && !profile.email)) return;
+        if (!profile) return;
         let card = drawer.querySelector('.user-profile-card');
         if (!card) {
             card = document.createElement('div');
@@ -308,7 +326,7 @@ function renderUserProfile(drawer) {
             drawer.appendChild(card);
         }
         const avatar = profile.picture || '/static/idoll_avatar.png';
-        const name = profile.name || (profile.email || 'User');
+        const name = profile.name || profile.email || profile.user_id || 'User';
         const email = profile.email || '';
         card.innerHTML = `
           <img src="${avatar}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border-color)" onerror="this.src='/static/idoll_avatar.png'"/>

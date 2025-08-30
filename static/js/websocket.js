@@ -1,6 +1,7 @@
 import { appendTempMessage, appendAssistantMessageContainer, showErrorNotification, formatDate } from './helpers.js';
 import { scrollToLastMessage } from './chat.js';
 import { createChatOnServer } from './uiUtils.js';
+import { upsertConversationSummary, removeConversationSummary, switchToChat } from './conversation.js';
 import { handleAudioPlaybackComplete, setCurrentAudioElement } from './audio_helpers.js';
 import { markdownToHtml, renderButtons } from './renderHelpers.js';
 
@@ -100,6 +101,13 @@ export function initializeWebSocket() {
             window.isConnected = true;
             reconnectAttempts = 0;
             updateConnectionStatus(true);
+            // Identify this connection for targeted events
+            try {
+                const uid = window.userId;
+                if (uid) {
+                    window.wsConnection.send(JSON.stringify({ type: 'identify', user_id: uid }));
+                }
+            } catch (e) {}
         };
 
         window.wsConnection.onmessage = evt => {
@@ -351,6 +359,20 @@ function handleWebSocketMessage(data) {
             console.log('→ stream_end');
             // final wrap-up (e.g. stop spinner, persist, etc.)
             handleLLMResponse(data);
+            break;
+
+        case 'conversation_created':
+        case 'conversation_updated':
+            if (data.summary) {
+                upsertConversationSummary(data.summary);
+            }
+            break;
+        case 'conversation_deleted':
+            if (data.summary && data.summary.id) {
+                removeConversationSummary(data.summary.id);
+            } else if (data.id) {
+                removeConversationSummary(data.id);
+            }
             break;
             
         default:
@@ -668,7 +690,8 @@ async function saveMessage(role, content) {
     });
     const images = window.selectedImageUuid ? [window.selectedImageUuid] : null;
     const payload = { role, content, images, time_stamp };
-    const url = `api/add_message/${window.userId}/${window.currentChatId}`;
+    const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+    const url = `${base}/add_message/${window.userId}/${window.currentChatId}`;
     
     try {
         const res = await fetch(url, {
