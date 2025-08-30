@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>IDOLL Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/idoll_avatar.png" type="image/x-icon">
+    <!-- Supabase config: paste your project URL and anon key below -->
+    <script>
+      // Replace these with your actual Supabase project URL and anon public key
+      window.SUPABASE_URL = window.SUPABASE_URL || 'https://YOUR_SUPABASE_PROJECT_REF.supabase.co';
+      window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+    </script>
+    <!-- Gate: require Supabase session + approved record -->
+    <script type="module" src="/static/js/app_gate.js"></script>
+</head>
+<body class="dark-theme">
+    <div class="layout-container">
+        <div class="chat-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="d-flex align-items-center">
+                    <button id="burger-menu-btn" class="btn btn-icon input-action-btn me-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-logo">
+                        <img src="/static/IDOLL_logo_white.png" alt="IDOLL" class="header-logo-img">
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="call-button" class="btn btn-icon call-btn" data-tooltip="Call">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button id="header-new-chat-btn" class="btn btn-icon input-action-btn me-1" data-tooltip="New chat">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                    <button id="users-btn" class="btn btn-icon input-action-btn me-1" data-tooltip="Memory">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages -->
+            <main id="chat-container" class="chat-container">
+                <!-- Chat main container -->
+                <div class="messages-wrapper">
+                    <div id="conversation-container">
+
+                    </div>
+                </div>
+                    <!-- Messages will be dynamically inserted here by JavaScript -->
+                </div>
+            </main>
+        </div>
+        
+        <!-- Fixed Chat Input at the bottom -->
+        <footer class="chat-input-container">
+            <div class="input-container-wrapper">
+                <div class="chat-input-group">
+                    <div class="chat-input-wrapper">
+                        <textarea class="chat-input" placeholder="Message IDOLL..."></textarea>
+                    </div>
+                    <div class="input-actions-bottom">
+                        <div class="left-buttons">
+                            <button id="upload-image-btn" class="btn btn-icon input-action-btn-circle" data-tooltip="Upload Files">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-icon input-action-btn-circle-text" data-tooltip="Search the web">
+                                <i class="fas fa-globe me-1"></i><span>Search</span>
+                            </button>
+                        </div>
+                        <div class="left-buttons">
+                            <button id="send-stt-message-btn" class="btn btn-icon input-action-btn-circle-send" data-tooltip="Dictate">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mic icon" class="h-[18px] w-[18px]" font-size="inherit"><path d="M18.9953 11.5415C19.5246 11.6991 19.826 12.2559 19.6685 12.7852C18.7771 15.7804 16.179 18.0417 13 18.4381V19.5H14.5C15.0523 19.5 15.5 19.9477 15.5 20.5C15.5 21.0523 15.0523 21.5 14.5 21.5H9.50002C8.94773 21.5 8.50002 21.0523 8.50002 20.5C8.50002 19.9477 8.94773 19.5 9.50002 19.5H11V18.4381C7.82093 18.0418 5.22279 15.7805 4.33136 12.7852C4.17382 12.2559 4.47522 11.6991 5.00456 11.5415C5.5339 11.384 6.09073 11.6854 6.24827 12.2148C6.98609 14.6939 9.28339 16.5 11.9999 16.5C14.7165 16.5 17.0138 14.6939 17.7516 12.2148C17.9091 11.6854 18.466 11.384 18.9953 11.5415Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 10.5V7C14.5 5.61929 13.3807 4.5 12 4.5C10.6193 4.5 9.5 5.61929 9.5 7V10.5C9.5 11.8807 10.6193 13 12 13C13.3807 13 14.5 11.8807 14.5 10.5ZM12 2.5C9.51472 2.5 7.5 4.51472 7.5 7V10.5C7.5 12.9853 9.51472 15 12 15C14.4853 15 16.5 12.9853 16.5 10.5V7C16.5 4.51472 14.4853 2.5 12 2.5Z" fill="currentColor"></path></svg>
+                            </button>
+                            <button id="send-message-btn" class="btn btn-icon input-action-btn-circle-send" data-tooltip="Send message">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="footer-disclaimer">
+                <span>IDOLL can make mistakes. Check important info.</span>
+            </div> -->
+        </footer>
+    </div>
+
+    <!-- Mobile navigation menu (hidden by default) -->
+    <div id="mobile-nav-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <button id="close-menu-btn" class="btn btn-icon input-action-btn me-2">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button id="theme-toggle-btn" class="btn btn-icon input-action-btn me-2">
+                <i class="fas fa-moon"></i>
+            </button>
+            <span id="connection-status" class="connection-status input-action-btn me-2">
+                <i class="fas fa-circle"></i>
+                <span id="latency-display" class="latency-text">-- ms</span>
+                <span id="speed-display" class="speed-text">↑ -- KB/s ↓ -- KB/s</span>
+            </span>
+        </div>
+        
+        <!-- Added conversations section to mobile menu -->
+        <div class="mobile-menu-sections">
+            <div class="mobile-menu-section">
+                <div id="mobile-conversations-list" class="chat-history-list">
+                    <!-- Conversations will be inserted here via JavaScript -->
+                    <div class="mobile-empty-state">
+                        <p>No conversations yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Call Modal -->
+    <div class="modal fade" id="callModal" tabindex="-1" aria-labelledby="callModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content call-modal-content">
+                <div class="modal-body text-center">
+                    <div class="call-status-container">
+                        <div class="call-avatar">
+                            <img src="static/idoll_avatar.png" alt="IDOLL" class="call-avatar-img">
+                            <div class="call-pulsating-circle"></div>
+                        </div>
+                        <h4 class="call-name mt-3">IDOLL</h4>
+                        <p class="call-status">Connecting...</p>
+                        <div class="call-timer">00:00</div>
+                    </div>
+                    <div class="call-actions mt-4">
+                        <button class="btn btn-icon call-action-btn btn-mute" title="Mute">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="end-call-button" class="btn btn-icon call-action-btn btn-end-call" data-bs-dismiss="modal" title="End Call">
+                            <i class="fas fa-phone-slash"></i>
+                        </button>
+                        <button class="btn btn-icon call-action-btn btn-speaker" title="Speaker">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Image Preview" class="img-fluid image-popup-preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio element for call audio output -->
+    <audio id="call-audio-output" autoplay hidden></audio>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/static/main.js"></script>
+    
+
+    <!-- and it's easy to individually load additional languages -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/perl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/scala.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/haskell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/erlang.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/shell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/assembly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/brainfuck.min.js"></script>
+
+    <script>hljs.highlightAll();</script> -->
+
+</body>
+</html>

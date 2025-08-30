@@ -1,0 +1,125 @@
+[
+    {
+        "role": "user",
+        "content": "안녕하세요",
+        "timestamp": "2025-08-09T13:52:29.157212"
+    },
+    {
+        "role": "user",
+        "content": "안녕하세요\\",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:52:29"
+    },
+    {
+        "role": "assistant",
+        "content": "안녕하세요! 어떻게 도와드릴까요?",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:52:31"
+    },
+    {
+        "role": "user",
+        "content": "뭐하세요?",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:53:04"
+    },
+    {
+        "role": "assistant",
+        "content": "저는 여러분의 질문에 최선을 다해 답변하고, 필요한 경우 정보를 찾아드리고, 기억을 도와드리고, 일정을 설정해 드리는 역할을 하고 있습니다. 오늘도 무엇이든 도와드릴 수 있는 것이 있으면 말씀해 주세요! 😊",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:53:10"
+    },
+    {
+        "role": "user",
+        "content": "지금 몇 시야?",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:53:38"
+    },
+    {
+        "role": "assistant",
+        "content": "현재 시간은 2025년 8월 9일 오후 1시 50분입니다. 필요한 일이 있으면 언제든지 말씀해 주세요! 😊",
+        "images": null,
+        "time_stamp": "Saturday, 08/09/2025 13:53:42"
+    },
+    {
+        "role": "user",
+        "content": "hello",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:48:57"
+    },
+    {
+        "role": "user",
+        "content": "hello",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:51:55"
+    },
+    {
+        "role": "user",
+        "content": "what can you do?",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:52:17"
+    },
+    {
+        "role": "user",
+        "content": "hey",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:56:20"
+    },
+    {
+        "role": "user",
+        "content": "what are you doing today?",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:56:39"
+    },
+    {
+        "role": "user",
+        "content": "what can you do? can you feel my presence?",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 12:57:17"
+    },
+    {
+        "role": "user",
+        "content": "what is this?",
+        "images": [
+            "/static/conversations/default_user/a8644305-b7ea-4d6a-88e3-c0da24d1052b_6bf8aabc-d670-4237-b02d-277e764ea524_idoll_avatar.png"
+        ],
+        "time_stamp": "Thursday, 08/14/2025 12:57:43"
+    },
+    {
+        "role": "user",
+        "content": "what is this?",
+        "images": [
+            "/static/conversations/default_user/a8644305-b7ea-4d6a-88e3-c0da24d1052b_86cc31db-e757-4631-9a16-ec8a7b817585_idoll_avatar.png"
+        ],
+        "time_stamp": "Thursday, 08/14/2025 12:59:29"
+    },
+    {
+        "role": "user",
+        "content": "no its okay, what do you know about me?",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 13:42:36"
+    },
+    {
+        "role": "user",
+        "content": "what do you know about me shady",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 13:44:55"
+    },
+    {
+        "role": "user",
+        "content": "what do you know about me shady",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 13:45:57"
+    },
+    {
+        "role": "user",
+        "content": "what do you know about me shady",
+        "images": null,
+        "time_stamp": "Thursday, 08/14/2025 13:46:38"
+    },
+    {
+        "role": "user",
+        "content": "Hello",
+        "images": null,
+        "time_stamp": "Friday, 08/15/2025 20:31:01"
+    }
+]

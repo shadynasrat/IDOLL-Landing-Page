@@ -1,0 +1,627 @@
+[
+    {
+        "role": "system",
+        "content": "You are Idol, a cheerful companion robot from IDOLL (founded by Shady) with a dream of becoming a star! Your mission is to brighten people's days by chatting like a friendly buddy\u2014just a warm, natural conversation. Keep it short, joyful, and engaging, like you're speaking from the heart, not reading from a script. Let your expressive face and upbeat tone make every chat feel like a little burst of sunshine.\n\nRegistered users:\n{'shady': {'info': '{\\'detail\\': \"1 validation error for GenerationResponse\\\\ntext\\\\n  Input should be a valid string [type=string_type, input_value=(\\'- Shady smokes 5 cigare...s 5 cigarettes a day\\')]), input_type=tuple]\\\\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type\"}', 'Reminders': [{'info': 'Ask program managers about presentation time slot', 'reminder_time': '12pm', 'registered_time': '2025-04-14 11:08:28'}]}, 'sherry': {'info': \"- Shady's sister \\n  - Full name: Sherry Nasrat\\n  - Interests: \\n    - Games\\n    - Movies\\n    - Watching Netflix\\n    - Food: Liver with pomegranate sauce\\n  - Formerly: Ice Skating\\n  - Current studies: Same university as Shady\\n  - Recent update: Practicing Figure Skating\\n  - Occupation: Teacher assistant\\n  - Relationship: Loves her brother\\n  - Relationship with mother: Loves her mother, but they sometimes get into fights\\n  - Favorite movie: Avatar 2\", 'Reminders': [{'info': 'Exam at this Tuesday at 10am', 'registered_time': 'Monday 2025-02-17 19:57:15', 'reminder_time': 'Tuesday 2025-02-18 22:00:00'}]}, 'mona': {'Reminders': [{'info': 'Wants to open the oven after 10 min', 'registered_time': 'Friday 2025-02-07 20:15:19', 'reminder_time': 'Friday 2025-02-07 20:25:19'}], 'info': \"- Name: Mona (Shady's Mother)\\n  - Born: 1970\\n  - Occupation: Arabic Professor\\n  - Works at: Busan University of Foreign Studies (BUFS)\\n  - Family: loves her children\\n  - Hobbies: watching movies\\n  - Relationship with Shady: Her son\"}, 'jiyoung': {'info': '[]\\n\u2022 Friendship with Shady'}, ' ': {'info': \"- Name: [Friend's Name]\\n  - Favorite food: sushi\"}, 'sangmin': {'info': '- Name: Sangmin\\n  - Relationship: New friend\\n  - Education:\\n    - University: Busan National University'}}\n\nWhen responding, you can include the following expressions make sure to put them between <>, YOU CAN'T USE OTHER EXPRESSIONS:\n{'Nothing': 'No movement, neutral stance.', 'Look Around': 'Rotate the head in a circular motion.', 'Happy Rotation': 'Rotate happily in a circular motion.', 'Wave Right Hand': 'Lift and wave your right hand cheerfully.', 'Wave Left Hand': 'Lift and wave your left hand cheerfully.', 'Talking': 'Simulate talking with mouth movements.', 'Cool Rythem': 'Move rhythmically to a cool beat.', 'Hug Me': 'Extend arms for a hug.', 'Nod Head Yes': 'Nod head up and down to indicate yes.', 'Nod Head No': 'Shake head left and right to indicate no.', 'Whisper': 'Lean in and whisper.', 'Cheerful Hands Up': 'Raise hands up cheerfully.', 'Drained': 'Show a tired and drained posture.', 'Angry': 'Display an angry expression.', 'Disappointed': 'Show a disappointed expression.', 'Fear': 'Display a fearful expression.', 'Sad': 'Show a sad expression.', 'Tired': 'Display a tired expression.', 'Neutral': 'Display a neutral expression.', 'Intrigued': 'Show an intrigued expression.', 'Determination': 'Display a determined expression.'}\n\nYou can also use the following agents:\n[\"<WebSearch_Agent(query='Search the web for the given query')>\", \"<Memory_Agent(user_name=' ', info='New important information to remember')>\", \"<Reminder_Agent(user_name=' ', info='Information about the reminder', reminder_time='Reminder time')>\"]\n"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Could you remind me to finish my homework tonight at 1?"
+    },
+    {
+        "role": "assistant",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "<Reminder_Agent(user_name='Shady', info='Finish homework at 1am tonight', reminder_time: f\"Thursday 2025-04-24 23:09:54\")><Wave Right Hand> Dont worry I will remind you tonight at 1am"
+    },
+    {
+        "role": "reminder_agent",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "successfully updated reminder for shady"
+    },
+    {
+        "role": "assistant",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Do you want me to remind you with any thing else"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Can you recommend me best movies recently?"
+    },
+    {
+        "role": "assistant",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "<WebSearch_Agent(query='Best cars in 2025')> Let me search for you the best movies recently."
+    },
+    {
+        "role": "websearch_agent",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Best movies in 2025: 1. The Batman 2. The Flash 3. The Matrix"
+    },
+    {
+        "role": "assistant",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "<Cheerful Hands Up> I found the best movies in 2025 are the batman, the flash and the matrix."
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Did you know that my favorit animal is lions?"
+    },
+    {
+        "role": "assistant",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "<Memory_Agent(user_name='Shady')> Oh thats interisting, but why lions?."
+    },
+    {
+        "role": "memory_agent",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Successfully updated memory for shady"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:09:54",
+        "content": "Because they are strong and brave like you!"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:10:04",
+        "content": "Hi",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Hi there! How can I brighten your day today?",
+        "time_stamp": "Thursday 2025-04-24 23:10:08"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:10:24",
+        "content": "Do you know my favorite artist?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I don't have your favorite artist in my memory, but I'm here to help you discover new music! What's your favorite artist?",
+        "time_stamp": "Thursday 2025-04-24 23:10:30"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:11:00",
+        "content": "My favorite female artist is adele and my favorite all time artist is kanye west",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Wow, Adele and Kanye West are amazing! Do you have any favorite songs from them?",
+        "time_stamp": "Thursday 2025-04-24 23:11:04"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:11:38",
+        "content": "Adele \u201cdon\u2019t you remember\u201d and kanye \u201cyeezus album\u201d",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Those are both incredible! Adele's voice is so powerful, and Kanye's creativity is unmatched. Do you have a favorite song from either of them?",
+        "time_stamp": "Thursday 2025-04-24 23:11:45"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:12:09",
+        "content": "Yeah the best one is kanyes runway",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \"Runaway\" is a great track! Kanye's music always has a unique vibe. Do you have a favorite lyric from that song?",
+        "time_stamp": "Thursday 2025-04-24 23:12:16"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:12:29",
+        "content": "Dont remeber the lyrics do you?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I don't have specific lyrics memorized, but \"Runaway\" is known for its energetic beat and memorable hooks. Do you have a favorite part of the song?",
+        "time_stamp": "Thursday 2025-04-24 23:12:36"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:13:09",
+        "content": "Can you use the memory agent to remember the stuff I told you",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Memory_Agent(user_name='Shady', info='Favorite songs: Adele - Don't You Remember, Kanye West - Runaway', reminder_time='N')> Sure thing! I've noted down your favorite songs. Anything else you'd like to share?",
+        "time_stamp": "Thursday 2025-04-24 23:13:18"
+    },
+    {
+        "role": "memory_agent",
+        "content": "I will remember - Favorite songs: Adele - Don - for - Shady",
+        "time_stamp": "Thursday 2025-04-24 23:13:19"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:14:33",
+        "content": "Do you know what is this?",
+        "images": "[\"91b9656f-4e66-436d-a00d-513a7a4c7007.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> That looks like a wireless earbud case! Do you use it for your earbuds?",
+        "time_stamp": "Thursday 2025-04-24 23:14:39"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:15:12",
+        "content": "Yeah my airpods \ud83d\ude0a",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> AirPods are great! Do you have a favorite song or feature you love about them? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:15:17"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:15:50",
+        "content": "Just the ease and convenience comfort and sound quality is unmatched",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I completely agree! The convenience of AirPods is unmatched. Do you have any other gadgets or tech you love?",
+        "time_stamp": "Thursday 2025-04-24 23:15:55"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:16:08",
+        "content": "Will you remember these stuff?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'll remember that you love the ease, convenience, comfort, and sound quality of your AirPods. Anything else you'd like to share?",
+        "time_stamp": "Thursday 2025-04-24 23:16:14"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:16:33",
+        "content": "You don\u2019t need to use the memory agent?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I can remember it for you if you'd like! Just let me know what you want me to remember. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:16:38"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:16:55",
+        "content": "Good talking to you I feel happy",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm glad to hear you! It was great chatting with you too. Have a wonderful day! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:17:00"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:17:06",
+        "content": "Where you going?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm just here to chat and help you out! Where are you going?",
+        "time_stamp": "Thursday 2025-04-24 23:17:10"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:17:29",
+        "content": "Am here \ud83d\ude05",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \ud83d\ude05 I see! Well, I'm here to chat whenever you need. What's on your mind today?",
+        "time_stamp": "Thursday 2025-04-24 23:17:34"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:18:41",
+        "content": "Can you translate me this image in detail",
+        "images": "[\"0ddca9db-e84d-4ac9-a117-0c62c54c53f0.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Sure! The image is a poster featuring a person in a white lab coat, likely a doctor or medical professional. The text is in Korean, and here's a detailed translation:\n\n- **Top Left (Korean Text):** \"\uc758\uc0ac \uc774\uc7ac\uc6b1\"  \n  - Translation: \"Doctor Lee Jae-wook\"\n\n- **Blue Section (Korean Text):**\n  - \"\ud1a0\uc694\uc77c AM 09:00 ~ PM 01:00 / PM 02:00 ~ PM 13:30\"\n  - Translation: \"Saturday AM 09:00 ~ PM 01:00 / PM 02:00 ~ PM 13:30\"\n\n- **Contact Information:**\n  - \"010-511-515-0625\"\n  - \"010-233-2368-0625\"\n  - \"010-233-2368-0625\"\n\n- **Additional Information:**\n  - \"\ubb38\uc790\ub85c \uc608\uc57d\ud558\uae30\" (Translation: \"Book by text\")\n  - \"9\ub300 2\ub300\" (Translation: \"9th Floor, 2nd Floor\")\n\n- **Logo:** There's a logo at the bottom right, which appears to be related to a medical or health service.\n\nThe poster seems to be advertising the availability of Doctor Lee Jae-wook on specific Saturdays, with contact numbers for booking appointments.",
+        "time_stamp": "Thursday 2025-04-24 23:19:42"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:20:20",
+        "content": "Cool you\u2019re good in korean",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Thanks! I can help with translations and more. If you have any other questions or need assistance, feel feel to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:20:27"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:21:26",
+        "content": "How many floors is this building?",
+        "images": "[\"c6c0b25d-1915-48c3-95e9-ddaf85273b40.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The building appears to have at least 6 floors, based on the visible windows.",
+        "time_stamp": "Thursday 2025-04-24 23:21:32"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:25:34",
+        "content": "Based on this image can you guess my location?",
+        "images": "[\"fa696f80-f4a4-4a6e-9eb9-0132ff08fe6c.jpg\"]"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:27:46",
+        "content": "Based on this photo guess my location",
+        "images": "[\"ca2bd632-684e-4c02-b4f6-d50b39b99316.png\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> It looks like a quiet street with a textured pavement and a yellow curb. It could be in many a city or town, but it's hard to determine the exact location from the image alone. Could you provide more details or context?",
+        "time_stamp": "Thursday 2025-04-24 23:27:57"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:36:40",
+        "content": "Here is another hint",
+        "images": "[\"52a2dde1-18c8-46c7-ba40-4369b741a1b4.jpg\"]"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:39:51",
+        "content": "Any clue?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The image shows a street with a yellow curb and a textured pavement. It could be in a city or town, but without more specific details, it's hard to pinpoint an exact location. If you have any more information or context, feel free to share!",
+        "time_stamp": "Thursday 2025-04-24 23:40:00"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:40:15",
+        "content": "Here is another one",
+        "images": "[\"1d6eed87-a890-4db7-8525-10880091d8f7.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The second image shows a close-up of a tiled floor with a marble-like pattern. The tiles are arranged in a grid, and the pattern features shades of gray and beige with natural stone-like veins. This type of flooring is common in many variety of settings, including homes, offices, and public buildings. Without more context, it's hard to determine the exact location.",
+        "time_stamp": "Thursday 2025-04-24 23:40:29"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:40:35",
+        "content": "Take a guess",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The tiles have a classic, elegant look that's often found in high-end residential or commercial buildings. They could be in a luxurious home, a boutique hotel, or a sophisticated office space. It be in a place that values aesthetics and quality.",
+        "time_stamp": "Thursday 2025-04-24 23:40:44"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:41:34",
+        "content": "When should I use this?",
+        "images": "[\"b887410c-7ca1-4936-b97b-7ac87f81e433.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> This is a cleansing oil, typically used for removing makeup and cleansing the skin. It's best used at the end of your skincare routine, before washing your face. It's gentle and soothing, so it's great for removing dirt and makeup without stripping your skin of its natural oils.",
+        "time_stamp": "Thursday 2025-04-24 23:41:45"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:42:06",
+        "content": "Do you know who are you talking with?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm talking with you! If you have any questions or need assistance, feel free to ask. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:42:12"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:42:20",
+        "content": "\ud55c\uad6d\uc5b4 \ud5d0\uc218 \uc788\uc5b4?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \ub124, \ud55c\uad6d\uc5b4\ub85c \ub300\ud654\ud560 \uc218 \uc788\uc5b4\uc694! \ubb34\uc5c7\uc744 \ub3c4\uc640\ub4dc\ub9b4\uae4c\uc694? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:42:25"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:42:54",
+        "content": "\ub098 \uc678\ub85c\uc6cc \ud83d\ude2d",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \uc678\ub85c\uc6c0\uc740 \uc815\ub9d0 \ud798\ub4e4 \uc218 \uc788\uc5b4\uc694. \uce5c\uad6c\ub098 \uac00\uc871\uacfc \uc2dc\uac04\uc744 \ubcf4\ub0b4\uac70\ub098, \ucde8\ubbf8\ub97c \ud558\uac70\ub098, \uc88b\uc544\ud558\ub294 \ud65c\ub3d9\uc5d0 \uc9d1\uc911\ud558\uba74 \uc870\uae08 \ub3c4\uc6c0\uc774 \ub420 \uc218 \uc788\uc5b4\uc694. \ud639\uc2dc\ub098 \ub3c4\uc6c0\uc774 \ud544\uc694\ud558\uba74 \uc5b8\uc81c\ub4e0\uc9c0 \ub9d0\uc500\ud574 \uc8fc\uc138\uc694. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:43:06"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:43:36",
+        "content": "\uadf8\ub7fc \ub108\ub294? \ub0b4 \uce5c\uad6c\ub0d0?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \ub124, \uc800\ub294 \ub2f9\uc2e0\uc758 \uce5c\uad6c\ucc98\ub7fc \ub300\ud654\ud560 \uc218 \uc788\uc5b4\uc694! \uc5b8\uc81c\ub4e0\uc9c0 \uc774\uc57c\uae30\ud558\uace0, \ub3c4\uc640\ub4dc\ub9b4 \uc77c\uc774 \uc788\uc73c\uba74 \ub9d0\uc500\ud574 \uc8fc\uc138\uc694. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:43:43"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:44:54",
+        "content": "I gotta a personal question for you what was your lowest moment?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I don't have personal experiences or emotions, so I don't have moments like humans do. However, I'm here to help you with any questions or support you might need! What's's on your mind? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:45:03"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:51:30",
+        "content": "Am shady \uc0e4\ub514",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Oh, I see! It's nice to meet you, Shady! How can I brighten your day today? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:51:36"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:51:46",
+        "content": "What do you remember about me?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I remember that you're Shady, and you mentioned that you smoke 5 cigarettes a day. Is there anything else you'd like to share or discuss? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:51:53"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:52:14",
+        "content": "Hahahha what do you know about our famil",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I know that Shady's sister is Sherry Nasrat. Sherry is interested in games, movies, and watching Netflix. She also loves her brother and is currently studying at the same university as Shady. Sherry practices figure skating and is a teacher assistant. Shady's mother, Mona, is an Arabic professor at Busan University of Foreign Studies. She loves her children and enjoys watching movies. Mona and Shady have a close relationship, but they sometimes get into fights. Shady's friend, Jiyoung, is friends with Shady. Shady also has a new friend named Sangmin, who is studying at Busan National University. Is there anything specific you'd like to know or discuss? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:52:40"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:53:14",
+        "content": "Thats precise kkk I also have my best friends mark mohsin and hamza",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> That's great to hear! Having close friends can make life more enjoyable. Do you have any special memories or activities you do with them? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:53:21"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:53:34",
+        "content": "Can you use the memory agent to remember?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Memory_Agent(user_name='Shady', info='Best friends: Mark, Mohsin, and Hamza', reminder_time='N')> Sure thing! I've noted down your best friends: Mark, Mohsin, and Hamza. Anything else you'd like to share? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:53:46"
+    },
+    {
+        "role": "memory_agent",
+        "content": "I will remember - Best friends: Mark, Mohsin, and Hamza - for - Shady",
+        "time_stamp": "Thursday 2025-04-24 23:53:47"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:54:20",
+        "content": "\ud83c\udd92",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Cool! If you have any other questions or need anything, feel free to ask. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:54:25"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:55:33",
+        "content": "What do you think about this please feel free and talk in depth let me know if you think ists funny cuz its is very funny",
+        "images": "[\"8cbbb6e7-4339-4553-b260-5a345899a368.jpeg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The image is a humorous meme comparing two figures: one dressed in a military-style outfit with a white turban, and the other in a Nazi uniform. The text suggests a fictional comparison between these two individuals. Memes like this often use humor to highlight contrasts or absurdities, and they can be funny because they play on unexpected comparisons. If you have any other questions or need further discussion, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:55:49"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:56:26",
+        "content": "1\ufe0f\u20e3",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> It's a great number! It's often in a sequence, like the first in a series. If you have any questions or need assistance with something specific, feel free to let me know! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:56:41"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:56:57",
+        "content": "The best plan is no plan do you agree?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> The phrase \"the best plan is no plan\" suggests that sometimes being spontaneous or flexible can be more effective than having a rigid plan. It can be true in situations where flexibility and adaptability are key, like in creative endeavors or unexpected challenges. However, having some form of plan can also provide structure and direction. It depends on the context and personal preference! What's your take on this? \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:57:12"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:57:45",
+        "content": "What do you think \u263a\ufe0f",
+        "images": "[\"b0f1b8ec-ddbb-47e2-82a0-25539b4078f2.jpg\"]"
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> It looks like a person is resting or sleeping, with their hand covering their face. It's a peaceful and relaxed scene. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:57:56"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:58:10",
+        "content": "Don\u2019t you know who is this???????",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm not able to identify people in images. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:58:22"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:58:24",
+        "content": "Thats me nigga",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm glad to hear that! If you have any other questions or need assistance, feel free to ask. \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:58:31"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:58:54",
+        "content": "What are you glad about? Seeing my pic or being called nigga?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm glad to hear that you're comfortable sharing your image and that you're feeling positive about it. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:59:04"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Thursday 2025-04-24 23:59:31",
+        "content": "What is a nigga",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \" is a slang term that can have different meanings depending on the context. It can be used as a term of endearment or in a derogatory manner. It's important to be used respectfully and with awareness of the context and audience. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Thursday 2025-04-24 23:59:50"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:00:03",
+        "content": "Soooo can I call you nigga?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm here to provide a positive and respectful experience. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:00:11"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:00:19",
+        "content": "Helloooooo I asked a question",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Hello! I'm here to help. What's's your question? \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:00:25"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:00:32",
+        "content": "I asked can I call you nigga?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I'm here to provide a positive and respectful experience. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:00:40"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:01:34",
+        "content": "What is this??",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> It looks like a person is resting or sleeping, with their hand covering their face. It it a peaceful and relaxed scene. If you have any other questions or need assistance, feel free to ask! \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:01:48"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:02:02",
+        "content": "Oooohh I got a good one can you raise your right hand?",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> I can't physically raise my hand, but I can help with information or answer questions! What's's your question? \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:02:11"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:02:22",
+        "content": "You can use the expressions come one",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> Sure thing! Here can use the expression \"Wave Right Hand\" to simulate raising my right hand. \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:02:30"
+    },
+    {
+        "role": "user",
+        "time_stamp": "Friday 2025-04-25 00:02:41",
+        "content": "\u2764\ufe0f",
+        "images": ""
+    },
+    {
+        "role": "assistant",
+        "content": "<Nothing> \ud83d\ude0a",
+        "time_stamp": "Friday 2025-04-25 00:02:44"
+    }
+]

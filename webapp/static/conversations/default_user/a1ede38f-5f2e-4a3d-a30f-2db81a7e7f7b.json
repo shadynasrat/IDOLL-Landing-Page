@@ -1,0 +1,189 @@
+[
+    {
+        "role": "user",
+        "content": "What is your name",
+        "timestamp": "2025-05-29T00:17:33.471424"
+    },
+    {
+        "role": "user",
+        "content": "?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:17:43"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure, I'd be happy to help! How can I assist you today?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:17:45"
+    },
+    {
+        "role": "user",
+        "content": "Whats your name?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:17:52"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm **Idol**, your empathetic assistant built by IDOLL. How can I assist you today?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:17:54"
+    },
+    {
+        "role": "user",
+        "content": "Cool can you summerize me your memory of your family",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:17"
+    },
+    {
+        "role": "assistant",
+        "content": "Certainly! Here's a summary of Shady's family:\n\n- **Mother**: Mona, an Arabic Professor at Busan University of Foreign Studies (BUFS). She loves her children and enjoys watching movies.\n- **Father**: Lives in Egypt.\n- **Sister**: Sherry, a teacher assistant who enjoys games, movies, and watching Netflix. She loves her brother and practices figure skating.\n- **Relationship with Shady**: Shady loves his sister and enjoys spending time with her.\n\nIs there anything specific you'd like to know more about?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:26"
+    },
+    {
+        "role": "user",
+        "content": "Am shady by the way",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:40"
+    },
+    {
+        "role": "assistant",
+        "content": "Ah, I see! Shady, it's great to meet you! How can I assist you today?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:42"
+    },
+    {
+        "role": "user",
+        "content": "Do I have a girlfriend?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:54"
+    },
+    {
+        "role": "assistant",
+        "content": "I don't have information about your personal relationships. However, if you're curious about your personal life or relationships, you might want to reflect on your interactions or consider ask someone close to you. How else can I assist you further?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:18:58"
+    },
+    {
+        "role": "user",
+        "content": "I do think about it more",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:09"
+    },
+    {
+        "role": "assistant",
+        "content": "It's natural to think about personal relationships. If you're feeling curious or have specific questions about your relationships, feel feel don't hesitate to ask. I'm here to help! How else can I assist you today?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:13"
+    },
+    {
+        "role": "user",
+        "content": "What about my friends",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:37"
+    },
+    {
+        "role": "assistant",
+        "content": "I don't have specific information about your friends. However, if you'd like to know more about your friends or need advice on how to maintain relationships, feel feel feel to share more or ask questions. How can I assist you further?",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:41"
+    },
+    {
+        "role": "user",
+        "content": "Shut the fuck up",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:49"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm sorry if I said offended you. If there's something specific you'd like to discuss or if you need assistance with something else, feel feel to let me know. I'm here to help!",
+        "images": null,
+        "time_stamp": "Thursday, 05/29/2025 00:19:52"
+    },
+    {
+        "role": "user",
+        "content": "what can i eat or drink from this table?",
+        "images": [
+            "/static/conversations/default_user/a1ede38f-5f2e-4a3d-a30f-2db81a7e7f7b_80f14998-2cd5-42e5-8362-6d642b5d00e4_image.jpg"
+        ],
+        "time_stamp": "Sunday, 06/01/2025 19:09:23"
+    },
+    {
+        "role": "assistant",
+        "content": "From the table, you can:\n\n- **Drink:** There's a bottle of water and a cup with a beverage.\n- **Eat:** There are some leftover food on plates, but it's not clear what it is. Be cautious if it's been there for a while.\n\nMake sure to check the freshness of any food before consuming it.",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:09:30"
+    },
+    {
+        "role": "user",
+        "content": "can you see the bread on table?",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:10:12"
+    },
+    {
+        "role": "assistant",
+        "content": "I can't see the table or any physical objects. However, if you're asking asking if there's bread on the table, you can check for yourself. If you need help with anything else, feel feel to ask!",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:10:16"
+    },
+    {
+        "role": "user",
+        "content": "im on a texas hold\u2019em table and im holding a Q5 and i dont know opponents hand what should my next action be?",
+        "images": [
+            "/static/conversations/default_user/a1ede38f-5f2e-4a3d-a30f-2db81a7e7f7b_6822cd09-908d-450a-acbe-772ccb92a4b3_IMG_0507.jpeg"
+        ],
+        "time_stamp": "Sunday, 06/01/2025 19:14:14"
+    },
+    {
+        "role": "assistant",
+        "content": "In Texas Hold'em, your decision depends on several factors, including the position you're in, the table image, and your opponents' betting patterns. Here's a general guide:\n\n1. **Position**: If you're in a late position (like the button or cutoff), you have more information about your opponents' actions. If you're in an early position, you have less information.\n\n2. **Table Image**: Your table image is important. If you've been playing aggressively, you might face more resistance. If you've been passive, you might have a freer hand.\n\n3 **Opponents' Betting Patterns**: Consider how your opponents have been betting. Aggressive players might be trying to bluff, while passive players might be more likely to have strong hands.\n\n3 **Hand Strength**: You have a Queen and a 5. This is a strong hand, especially if you have a suited connection (QJ). However, without a 5, you're more vulnerable to higher pairs.\n\n3 **Action**: \n- **Raise**: If you're in a late position and have a strong table image, consider raising to build up the pot and see if you can a call.\n- **Check**: If you're in an early position or want to see a flop cheaply, check. This allows you to see the flop for the minimum.\n- **Call**: If you're in a late position and think your table image is strong, you might call a raise to see the flop.\n\n3 **Flop Considerations**: \n- If the flop comes with high cards (like a pair or a flush draw), you might want to see the turn and river.\n- If the flop is weak (like two low cards and a high), you might want to check and see if you can a bet call.\n\nRemember, poker is a game of probabilities and reading your opponents. Adjust your strategy based on the table dynamics and your opponents' behavior.",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:14:44"
+    },
+    {
+        "role": "user",
+        "content": "Read me all the cards and opponents cards on this poker game",
+        "images": [
+            "/static/conversations/default_user/a1ede38f-5f2e-4a3d-a30f-2db81a7e7f7b_791cd698-b06c-4d4e-9891-f42d0c73708e_IMG_4102.jpeg"
+        ],
+        "time_stamp": "Sunday, 06/01/2025 19:16:53"
+    },
+    {
+        "role": "assistant",
+        "content": "In the image, the following cards are on the table:\n\n- Queen of Clubs (Q\u2663)\n- Jack of Hearts (J\u2665)\n- Six of Spades (6\u2660)\n\nThe opponents' hands are:\n\n1. Player 1 (Option): Queen of Diamonds (Q\u2666) and Five of Hearts (5\u2665)\n2. Player 2 (Gelbini): Queen of Hearts (Q\u2665) and Ten of Diamonds (10\u2666)\n\nThe pot size is 2,540,000 BB, with Player 1 having a 21% chance of winning and Player 2 having a 79% chance.",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:17:05"
+    },
+    {
+        "role": "user",
+        "content": "I have a Q and 5 off suit what should I do",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:18:19"
+    },
+    {
+        "role": "assistant",
+        "content": "With a Queen and a 5 off suit, you have a strong hand, especially if you have a suited connection (QJ).). Here's what you can consider:\n\n1. **Raise**: If you're in a late position and have a strong table image, consider raising to build up the pot and see if you can a call. This can show strength and make it harder for your opponents to call.\n\n2. **Check**: If you're in an early position or want to see the flop cheaply, check. This allows you to see the flop for the minimum and decide later whether to continue.\n\n3 Opponents' Betting Patterns: Consider how your opponents have been betting. Aggressive players might be trying to bluff, while passive players might be more likely to have strong hands.\n\n3 Flop Considerations: - If the flop comes with high cards (like a pair or a flush draw), you might want to see the flop and river.- If the flop is weak ( like two low cards and a high), you might want to check and see if you can a bet call.\n\nRemember, poker is a game of probabilities and read your opponents. Adjust your strategy based on the table dynamics and your opponents' behavior.",
+        "images": null,
+        "time_stamp": "Sunday, 06/01/2025 19:18:38"
+    },
+    {
+        "role": "user",
+        "content": "Ay what ya doing now? Keep it short funny with imoji",
+        "images": null,
+        "time_stamp": "Thursday, 06/05/2025 17:50:50"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm here to help you with any questions or tasks you have! \ud83d\ude0a What can I assist you with today?",
+        "images": null,
+        "time_stamp": "Thursday, 06/05/2025 17:50:53"
+    },
+    {
+        "role": "user",
+        "content": "Whats the car number plate?",
+        "images": [
+            "/static/conversations/default_user/a1ede38f-5f2e-4a3d-a30f-2db81a7e7f7b_1f1aed47-dd43-401e-b6c4-cb54f8fdc8f3_IMG_4115.jpeg"
+        ],
+        "time_stamp": "Sunday, 06/08/2025 20:57:23"
+    }
+]

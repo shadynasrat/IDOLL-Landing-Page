@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDOLL — Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.SUPABASE_URL = window.SUPABASE_URL || 'https://YOUR_SUPABASE_PROJECT_REF.supabase.co';
+      window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+    </script>
+  </head>
+  <body class="bg-neutral-950 text-white min-h-screen">
+    <main class="max-w-5xl mx-auto p-6">
+      <h1 class="text-2xl font-bold">Admin</h1>
+      <p class="text-white/70">Requires Supabase user with app_metadata.role = 'admin'.</p>
+      <div class="mt-4 flex gap-2">
+        <button id="signin-google" class="rounded bg-white text-black px-4 py-2">Sign in with Google</button>
+        <button id="signout" class="rounded bg-white/10 px-4 py-2 border border-white/20">Sign out</button>
+        <span id="whoami" class="text-sm text-white/70"></span>
+      </div>
+
+      <section class="mt-8 grid md:grid-cols-2 gap-6">
+        <div class="border border-white/15 rounded-xl p-4">
+          <h2 class="font-semibold">Early Access</h2>
+          <div class="text-sm text-white/70 mb-2">Approve or revoke users</div>
+          <form id="approve-form" class="flex gap-2 mb-3">
+            <input id="approve-email" type="email" placeholder="user@example.com" class="flex-1 rounded bg-white/10 border border-white/20 px-3 py-2" />
+            <button class="rounded bg-white text-black px-3">Approve</button>
+          </form>
+          <div id="ea-list" class="text-sm"></div>
+        </div>
+
+        <div class="border border-white/15 rounded-xl p-4">
+          <h2 class="font-semibold">Invites</h2>
+          <div class="text-sm text-white/70 mb-2">Create and manage codes</div>
+          <form id="invite-form-admin" class="grid grid-cols-2 gap-2 mb-3">
+            <input id="code" placeholder="IDOLL-ALPHA-2024" class="rounded bg-white/10 border border-white/20 px-3 py-2 col-span-2" />
+            <input id="max_uses" type="number" placeholder="max uses (optional)" class="rounded bg-white/10 border border-white/20 px-3 py-2" />
+            <input id="note" placeholder="note (optional)" class="rounded bg-white/10 border border-white/20 px-3 py-2" />
+            <button class="rounded bg-white text-black px-3 py-2 col-span-2">Create invite</button>
+          </form>
+          <div id="invites-list" class="text-sm"></div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { supabase } from '/static/js/supabaseClient.js';
+
+      const whoami = document.getElementById('whoami');
+
+      function isAdmin(user){
+        try { return (user?.app_metadata?.role === 'admin'); } catch { return false; }
+      }
+
+      async function refreshSessionInfo(){
+        const { data: { session } } = await supabase.auth.getSession();
+        whoami.textContent = session?.user ? `${session.user.email} (${session.user.app_metadata?.role||'user'})` : 'Signed out';
+        return session;
+      }
+
+      document.getElementById('signin-google').onclick = async () => {
+        const redirectTo = window.location.origin + '/admin.html';
+        const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
+        if (error) alert(error.message);
+      };
+
+      document.getElementById('signout').onclick = async () => {
+        await supabase.auth.signOut();
+        location.reload();
+      };
+
+      supabase.auth.onAuthStateChange(() => refreshSessionInfo());
+      await refreshSessionInfo();
+
+      // Admin-only helpers
+      async function adminGuard(){
+        const session = await refreshSessionInfo();
+        if (!session?.user || !isAdmin(session.user)) {
+          alert('Admin access required. Set app_metadata.role = "admin" for your user and configure RLS.');
+          throw new Error('not_admin');
+        }
+        return session.user;
+      }
+
+      async function listEarlyAccess(){
+        try { await adminGuard(); } catch { return; }
+        const { data, error } = await supabase.from('early_access').select('email, approved, approved_at').order('approved_at', { ascending: false });
+        const el = document.getElementById('ea-list');
+        if (error) { el.textContent = 'Cannot list early access: ' + error.message; return; }
+        el.innerHTML = (data||[]).map(r => `<div class="py-1">${r.email} — ${r.approved ? 'approved' : 'pending'} ${r.approved_at ? '('+new Date(r.approved_at).toLocaleString()+')' : ''}</div>`).join('');
+      }
+
+      async function listInvites(){
+        try { await adminGuard(); } catch { return; }
+        const { data, error } = await supabase.from('invites').select('code, uses, max_uses, active, expires_at, note').order('code');
+        const el = document.getElementById('invites-list');
+        if (error) { el.textContent = 'Cannot list invites: ' + error.message; return; }
+        el.innerHTML = (data||[]).map(r => `<div class="py-1">${r.code} — ${r.uses}/${r.max_uses ?? '∞'} — ${r.active ? 'active' : 'inactive'} ${r.expires_at ? '('+new Date(r.expires_at).toLocaleDateString()+')' : ''} ${r.note? '— '+r.note:''}</div>`).join('');
+      }
+
+      // Approve user
+      document.getElementById('approve-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try { await adminGuard(); } catch { return; }
+        const email = document.getElementById('approve-email').value.trim();
+        if (!email) return;
+        const { error } = await supabase.from('early_access').upsert({ email, approved: true, approved_at: new Date().toISOString() });
+        if (error) { alert('Failed to approve: ' + error.message); return; }
+        document.getElementById('approve-email').value='';
+        listEarlyAccess();
+      });
+
+      // Create invite
+      document.getElementById('invite-form-admin').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try { await adminGuard(); } catch { return; }
+        const code = document.getElementById('code').value.trim();
+        const max_uses = document.getElementById('max_uses').value ? parseInt(document.getElementById('max_uses').value, 10) : null;
+        const note = document.getElementById('note').value.trim() || null;
+        if (!code) return;
+        const normalized_code = code.replace(/-/g,'').toLowerCase();
+        const { error } = await supabase.from('invites').insert({ code, normalized_code, max_uses, note, active: true });
+        if (error) { alert('Failed to create invite: ' + error.message); return; }
+        document.getElementById('code').value='';
+        document.getElementById('max_uses').value='';
+        document.getElementById('note').value='';
+        listInvites();
+      });
+
+      listEarlyAccess();
+      listInvites();
+    </script>
+  </body>
+</html>
+

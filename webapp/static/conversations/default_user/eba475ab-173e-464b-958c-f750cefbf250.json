@@ -1,0 +1,25 @@
+[
+    {
+        "role": "user",
+        "content": "Help me with my homework",
+        "timestamp": "2025-08-19T18:31:47.340945"
+    },
+    {
+        "role": "user",
+        "content": "Help me with my homework",
+        "images": null,
+        "time_stamp": "Tuesday, 08/19/2025 18:31:47"
+    },
+    {
+        "role": "user",
+        "content": "before that can you tell me who are you and what can you do?",
+        "images": null,
+        "time_stamp": "Tuesday, 08/19/2025 18:33:51"
+    },
+    {
+        "role": "user",
+        "content": "???",
+        "images": null,
+        "time_stamp": "Tuesday, 08/19/2025 19:56:51"
+    }
+]
