@@ -1,2 +1,2 @@
 /api/*  https://idoll.ngrok.app/api/:splat  200
-/ws      https://idoll.ngrok.app/ws          200
+/ws      wss://idoll.ngrok.app/ws           200
