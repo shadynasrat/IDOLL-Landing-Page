@@ -29,7 +29,7 @@
   </head>
   <body class="bg-aurora text-white min-h-screen">
     <script>
-      // Configure API and WS base for cross-origin use
+      // Configure API and WS base for cross-origin use (align with server settings)
       window.IDOLL_API_BASE = 'https://idoll.ngrok.app/api';
       window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
     </script>
@@ -129,6 +129,17 @@
       if (denied) {
         error.textContent = 'Early access required. Please enter your invite code or request access.';
         error.classList.remove('hidden');
+        // If user is already approved, hide the error to avoid mixed messages
+        (async () => {
+          try {
+            const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+            const res = await fetch(base + '/auth/session', { credentials: 'include' });
+            const sess = await res.json();
+            if (sess && sess.authenticated && sess.user && sess.user.role === 'early_access') {
+              error.classList.add('hidden');
+            }
+          } catch {}
+        })();
       }
 
       // Access method toggle logic
