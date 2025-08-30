@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>IDOLL Interface</title>
-    <script>window.IDOLL_API_BASE='https://idoll.ngrok.app/api';</script>
+    <!-- API base is configured in static/js/config.js; avoid hardcoding to keep cookies first-party via Netlify proxy -->
     <!-- Tailwind (no build step) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -158,10 +158,11 @@
     <audio id="call-audio-output" autoplay hidden></audio>
 
 
-    <script>
+    <script type="module">
+      import { API_BASE } from './static/js/config.js';
       (async () => {
         try {
-          const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+          const base = API_BASE;
           const res = await fetch(base + '/auth/session', { credentials: 'include' });
           const sess = await res.json();
           if (!sess || !sess.authenticated || (sess.user && sess.user.role && sess.user.role !== 'early_access')) {
@@ -177,8 +178,6 @@
           }
           if (!uid) uid = 'guest_' + Math.random().toString(36).slice(2, 8);
           window.userId = uid;
-          // Do not set a default chat; let the app pick the first or show welcome
-          // Load app only after session established and userId set
           await import('/static/main.js');
         } catch (e) {
           console.error('Auth check failed:', e);

@@ -15,9 +15,9 @@ if (host === 'localhost' || host === '127.0.0.1') {
   defaultApi = 'https://idoll.ngrok.app/api';
   defaultWs  = 'wss://idoll.ngrok.app/ws';
 } else if (host === 'idoll.love' || host.endsWith('.idoll.love')) {
-  // Production: point website to ngrok API gateway
-  defaultApi = 'https://idoll.ngrok.app/api';
-  defaultWs  = 'wss://idoll.ngrok.app/ws';
+  // Production: use first-party paths so cookies are first-party; Netlify rewrites proxy to ngrok
+  defaultApi = '/api';
+  defaultWs  = loc.origin.replace(/^http/, 'ws') + '/ws';
 } else {
   defaultApi = '/api';
   defaultWs  = loc.origin.replace(/^http/, 'ws') + '/ws';
