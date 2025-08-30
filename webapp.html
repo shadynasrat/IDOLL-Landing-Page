@@ -19,6 +19,10 @@
     <link rel="icon" href="/static/idoll_avatar.png" type="image/x-icon">
 </head>
 <body class="dark-theme bg-night text-white">
+    <!-- Optional override to force WS to ngrok while proxy is adjusted -->
+    <script>
+      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
+    </script>
     <script type="module" src="./static/js/config.js"></script>
     <div class="layout-container">
         <div class="chat-container">

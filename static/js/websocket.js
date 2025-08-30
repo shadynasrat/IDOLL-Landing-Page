@@ -91,54 +91,81 @@ function stopGeneration() {
 
 // Initialize WebSocket connection
 export function initializeWebSocket() {
-    const wsUrl = window.IDOLL_WS || (location.origin.replace(/^http/, 'ws') + '/ws');
-    try { console.log('[IDOLL] Connecting WS to:', wsUrl); } catch {}
-    
-    try {
-        window.wsConnection = new WebSocket(wsUrl);
-        
-        window.wsConnection.onopen = () => {
-            console.log('WebSocket connected');
-            window.isConnected = true;
-            reconnectAttempts = 0;
-            updateConnectionStatus(true);
-            // Identify this connection for targeted events
-            try {
-                const uid = window.userId;
-                if (uid) {
-                    window.wsConnection.send(JSON.stringify({ type: 'identify', user_id: uid }));
+    // Build candidate URLs: prefer configured, then same‑origin, then explicit ngrok fallback
+    const sameOrigin = (location.origin.replace(/^http/, 'ws') + '/ws');
+    const configured = window.IDOLL_WS || null;
+    const ngrok = 'wss://idoll.ngrok.app/ws';
+    const candidates = Array.from(new Set([configured || sameOrigin, sameOrigin, ngrok]));
+    let tried = [];
+
+    const connectAt = (index) => {
+        const wsUrl = candidates[index];
+        tried.push(wsUrl);
+        try { console.log('[IDOLL] Connecting WS to:', wsUrl); } catch {}
+
+        let opened = false;
+        try {
+            window.wsConnection = new WebSocket(wsUrl);
+
+            window.wsConnection.onopen = () => {
+                opened = true;
+                console.log('WebSocket connected');
+                window.isConnected = true;
+                reconnectAttempts = 0;
+                updateConnectionStatus(true);
+                // Identify this connection for targeted events
+                try {
+                    const uid = window.userId;
+                    if (uid) {
+                        window.wsConnection.send(JSON.stringify({ type: 'identify', user_id: uid }));
+                    }
+                } catch (e) {}
+            };
+
+            window.wsConnection.onmessage = evt => {
+                let payload;
+                try { payload = JSON.parse(evt.data); }
+                catch (e) { console.error('Invalid JSON from WS', evt.data); return; }
+                handleWebSocketMessage(payload);
+            };
+
+            window.wsConnection.onclose = () => {
+                console.log('WebSocket disconnected');
+                window.isConnected = false;
+                stopLatencyMeasurement();
+                updateConnectionStatus(false);
+                // If we never opened and have more candidates, try next; otherwise normal reconnect
+                if (!opened && index + 1 < candidates.length) {
+                    console.warn('[IDOLL] WS connect failed, trying fallback:', candidates[index + 1]);
+                    connectAt(index + 1);
+                } else {
+                    attemptReconnect();
                 }
-            } catch (e) {}
-        };
+            };
 
-        window.wsConnection.onmessage = evt => {
-          let payload;
-          try {
-            payload = JSON.parse(evt.data);
-          } catch (e) {
-            console.error("Invalid JSON from WS", evt.data);
-            return;
-          }
-          handleWebSocketMessage(payload);
-        };
+            window.wsConnection.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                showErrorNotification('Connection error');
+                // If error occurs before open and more candidates exist, try fallback immediately
+                if (!opened && index + 1 < candidates.length) {
+                    console.warn('[IDOLL] WS error before open, trying fallback:', candidates[index + 1]);
+                    try { window.wsConnection.close?.(); } catch {}
+                    connectAt(index + 1);
+                }
+            };
 
-        window.wsConnection.onclose = () => {
-            console.log('WebSocket disconnected');
-            window.isConnected = false;
-            stopLatencyMeasurement();
-            updateConnectionStatus(false);
-            attemptReconnect();
-        };
+        } catch (error) {
+            console.error('Failed to connect to WebSocket:', error);
+            // hard failure -> try next candidate if any
+            if (index + 1 < candidates.length) {
+                connectAt(index + 1);
+            } else {
+                showErrorNotification('Failed to connect');
+            }
+        }
+    };
 
-        window.wsConnection.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            showErrorNotification('Connection error');
-        };
-
-    } catch (error) {
-        console.error('Failed to connect to WebSocket:', error);
-        showErrorNotification('Failed to connect');
-    }
+    connectAt(0);
 }
 
 // Add latency measurement variables
