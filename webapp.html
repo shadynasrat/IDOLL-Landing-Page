@@ -157,28 +157,103 @@
     <!-- Audio element for call audio output -->
     <audio id="call-audio-output" autoplay hidden></audio>
 
+    <!-- Early-access overlay shown to authenticated users without early_access role -->
+    <div id="invite-overlay" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/80 px-4">
+      <div class="w-full max-w-md rounded-2xl bg-[#121826] text-white border border-white/10 shadow-2xl p-6">
+        <div class="flex items-center gap-3 mb-2">
+          <img src="/static/images/logo-white.png" alt="IDOLL" class="h-7 w-auto" />
+          <h2 class="text-lg font-semibold">Enter Invite Code</h2>
+        </div>
+        <p class="text-sm text-white/70 mb-4">Your account is signed in but not yet enabled for early access. Enter your invite code to unlock the app.</p>
+        <form id="invite-unlock-form" class="space-y-3">
+          <div>
+            <label for="invite-code" class="block text-sm mb-1">Invite code</label>
+            <input id="invite-code" name="code" type="text" required placeholder="e.g. IDOLL-ALPHA-2024" class="w-full uppercase tracking-wider rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
+            <p class="text-xs text-white/50 mt-1">Case-insensitive; dashes optional.</p>
+          </div>
+          <button type="submit" class="w-full rounded-full bg-white text-ink px-5 py-2.5 font-medium hover:opacity-95">Unlock access</button>
+          <p id="invite-error" class="hidden text-rose-300 text-sm"></p>
+        </form>
+      </div>
+    </div>
+
 
     <script type="module">
       import { API_BASE } from './static/js/config.js';
+      // Helper that mirrors auth_client.js behavior without loading main app until allowed
+      const apiFetch = (path, options = {}) => {
+        const base = API_BASE;
+        const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
+        return fetch(url, { credentials: 'include', ...options });
+      };
+      const redeemInvite = async (email, code) => {
+        const res = await apiFetch('/invite/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code, idToken: window.idollGoogleToken || null })
+        });
+        return res.json();
+      };
+
       (async () => {
         try {
-          const base = API_BASE;
-          const res = await fetch(base + '/auth/session', { credentials: 'include' });
+          const res = await apiFetch('/auth/session');
           const sess = await res.json();
-          if (!sess || !sess.authenticated || (sess.user && sess.user.role && sess.user.role !== 'early_access')) {
+          if (!sess || !sess.authenticated) {
+            // Must be signed in first
             window.location.href = '/early-access.html?denied=1';
             return;
           }
+
           const user = sess.user || {};
           window.userProfile = user;
-          let uid = user.user_id || null;
-          if (!uid) {
-            if (user.sub) uid = 'g_' + user.sub;
-            else if (user.email) uid = 'e_' + String(user.email).toLowerCase().replace(/[^a-z0-9]/g, '-');
+
+          // If already approved, load the app
+          if (user && user.role === 'early_access') {
+            window.userId = user.user_id || user.sub || (user.email ? 'e_' + String(user.email).toLowerCase().replace(/[^a-z0-9]/g, '-') : undefined);
+            await import('/static/main.js');
+            return;
           }
-          if (!uid) uid = 'guest_' + Math.random().toString(36).slice(2, 8);
-          window.userId = uid;
-          await import('/static/main.js');
+
+          // Otherwise, show invite overlay and gate access until redeemed
+          const overlay = document.getElementById('invite-overlay');
+          overlay.classList.remove('hidden');
+          overlay.classList.add('flex');
+          const form = document.getElementById('invite-unlock-form');
+          const error = document.getElementById('invite-error');
+          const codeInput = document.getElementById('invite-code');
+          const normalize = (c) => (c || '').trim();
+
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            error.classList.add('hidden');
+            const code = normalize(codeInput.value);
+            const email = user.email || '';
+            try {
+              const out = await redeemInvite(email, code);
+              if (out && out.ok) {
+                // Refresh session then load app
+                const s2 = await apiFetch('/auth/session').then(r=>r.json()).catch(()=>sess);
+                const u2 = (s2 && s2.user) ? s2.user : user;
+                window.userProfile = u2;
+                if (u2.role !== 'early_access') {
+                  // Fallback reload to ensure cookies/metadata are applied
+                  window.location.reload();
+                  return;
+                }
+                overlay.classList.add('hidden');
+                window.userId = u2.user_id || u2.sub || (u2.email ? 'e_' + String(u2.email).toLowerCase().replace(/[^a-z0-9]/g, '-') : undefined);
+                await import('/static/main.js');
+                return;
+              }
+              error.textContent = 'Wrong code. Please try again.';
+              error.classList.remove('hidden');
+            } catch (err) {
+              console.error('Invite redeem failed', err);
+              error.textContent = 'Invite check failed. Please try again.';
+              error.classList.remove('hidden');
+            }
+          });
         } catch (e) {
           console.error('Auth check failed:', e);
           window.location.href = '/early-access.html?denied=1';

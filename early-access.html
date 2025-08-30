@@ -118,6 +118,20 @@
 
     <script src="./static/js/auth_client.js"></script>
     <script>
+      // If already authenticated, centralize the invite flow in webapp overlay
+      (async () => {
+        try {
+          const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+          const res = await fetch(base + '/auth/session', { credentials: 'include' });
+          const sess = await res.json();
+          if (sess && sess.authenticated) {
+            // Always send signed-in users to webapp; it will either load or prompt for invite
+            window.location.href = '/webapp.html';
+            return;
+          }
+        } catch {}
+      })();
+
       // Auto show error if redirected from denied
       const params = new URLSearchParams(location.search);
       const denied = params.get('denied');
