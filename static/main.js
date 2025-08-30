@@ -42,6 +42,33 @@ function initIdollApp() {
     const closeBtn = document.getElementById('close-menu-btn');
     const mobileMenu = document.getElementById('mobile-nav-menu');
 
+    // Desktop sidebar: restore saved state (default open on desktop)
+    try {
+        const savedSidebar = localStorage.getItem('sidebarOpen');
+        if (window.innerWidth >= 1024) {
+            if (savedSidebar === null) {
+                document.body.classList.add('sidebar-open');
+            } else if (savedSidebar === '1') {
+                document.body.classList.add('sidebar-open');
+            } else {
+                document.body.classList.remove('sidebar-open');
+            }
+        } else {
+            document.body.classList.remove('sidebar-open');
+        }
+    } catch {}
+
+    // Keep sidebar state sensible on resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth < 1024) {
+            document.body.classList.remove('sidebar-open');
+        } else {
+            // keep whatever state user chose previously
+            const savedSidebar = localStorage.getItem('sidebarOpen');
+            if (savedSidebar === '1') document.body.classList.add('sidebar-open');
+        }
+    });
+
 
     
     const tooltipElements = document.querySelectorAll('[data-tooltip]');
@@ -64,18 +91,26 @@ function initIdollApp() {
 
     // Directly add click handlers to ensure functionality
     if (burgerBtn) {
-            burgerBtn.addEventListener('click', function() {
-                    console.log("Burger button clicked (inline)");
-                    mobileMenu.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-            });
+        burgerBtn.addEventListener('click', function(ev) {
+            // Desktop: toggle sidebar. Mobile: open slide-over menu.
+            if (window.innerWidth >= 1024) {
+                ev.stopPropagation();
+                document.body.classList.toggle('sidebar-open');
+                try { localStorage.setItem('sidebarOpen', document.body.classList.contains('sidebar-open') ? '1' : '0'); } catch {}
+            } else {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
 
-            document.addEventListener('click', function(event) {
-                    if (!mobileMenu.contains(event.target) && !burgerBtn.contains(event.target)) {
-                            mobileMenu.classList.remove('active');
-                            document.body.style.overflow = '';
-                    }
-            });
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 1024) {
+                if (mobileMenu && !mobileMenu.contains(event.target) && !burgerBtn.contains(event.target)) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
     }
     
     if(closeBtn) {
@@ -111,4 +146,3 @@ window.switchToChat       = switchToChat;
 window.copyToClipboard    = copyToClipboard;
 window.markdownToHtml     = markdownToHtml;
 window.showConversationsPanel = showConversationsPanel;
-

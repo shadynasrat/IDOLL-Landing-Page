@@ -282,7 +282,13 @@
 
           // If already approved, load the app
           if (user && user.role === 'early_access') {
-            window.userId = user.user_id || user.sub || (user.email ? 'e_' + String(user.email).toLowerCase().replace(/[^a-z0-9]/g, '-') : undefined);
+            const deriveUserId = (u) => {
+              const sanitizeEmail = (e) => 'e_' + String(e).toLowerCase().replace(/[^a-z0-9]/g, '-');
+              return (
+                u.user_id || u.id || u.uid || u.sub || (u.email ? sanitizeEmail(u.email) : undefined)
+              );
+            };
+            window.userId = deriveUserId(user);
             await import('/static/main.js');
             return;
           }
@@ -313,7 +319,13 @@
                   return;
                 }
                 overlay.classList.add('hidden');
-                window.userId = u2.user_id || u2.sub || (u2.email ? 'e_' + String(u2.email).toLowerCase().replace(/[^a-z0-9]/g, '-') : undefined);
+                const deriveUserId = (u) => {
+                  const sanitizeEmail = (e) => 'e_' + String(e).toLowerCase().replace(/[^a-z0-9]/g, '-');
+                  return (
+                    u.user_id || u.id || u.uid || u.sub || (u.email ? sanitizeEmail(u.email) : undefined)
+                  );
+                };
+                window.userId = deriveUserId(u2);
                 await import('/static/main.js');
                 return;
               }

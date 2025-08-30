@@ -1,5 +1,5 @@
 import { renderMessageGroup } from './renderHelpers.js';
-import { setupCollapsibleMessages, setupEditButtons, scrollToLastMessage } from './uiUtils.js';
+import { setupCollapsibleMessages, setupEditButtons, scrollToLastMessage, createNewChat } from './uiUtils.js';
 
 let chatHistoryData = [];
 
@@ -228,6 +228,22 @@ export function displayChatHistory() {
                 return;
             }
         }
+    }
+
+    // Ensure drawer header with New Chat button exists
+    let drawerHeader = conversationDrawer.querySelector('.drawer-header');
+    if (!drawerHeader) {
+        drawerHeader = document.createElement('div');
+        drawerHeader.className = 'drawer-header';
+        drawerHeader.innerHTML = `
+            <button id="sidebar-new-chat" class="new-chat-btn" title="New chat">
+                <i class="fas fa-plus"></i>
+                <span>New chat</span>
+            </button>
+        `;
+        conversationDrawer.appendChild(drawerHeader);
+        const newBtn = drawerHeader.querySelector('#sidebar-new-chat');
+        if (newBtn) newBtn.addEventListener('click', (e) => { e.preventDefault(); createNewChat(); });
     }
 
     // Find or create chat history list
