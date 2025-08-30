@@ -1,5 +1,5 @@
 import { appendTempMessage, appendAssistantMessageContainer, showErrorNotification, formatDate } from './helpers.js';
-import { scrollToLastMessage } from './chat.js';
+import { scrollToLastMessage } from './uiUtils.js';
 import { createChatOnServer } from './uiUtils.js';
 import { upsertConversationSummary, removeConversationSummary, switchToChat } from './conversation.js';
 import { playAudioFromBase64, clearAudioQueue } from './ws/audioStream.js';

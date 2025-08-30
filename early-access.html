@@ -124,11 +124,12 @@
           const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
           const res = await fetch(base + '/auth/session', { credentials: 'include' });
           const sess = await res.json();
-          if (sess && sess.authenticated) {
-            // Always send signed-in users to webapp; it will either load or prompt for invite
+          // Only auto-redirect if already fully approved
+          if (sess && sess.authenticated && sess.user && sess.user.role === 'early_access') {
             window.location.href = '/webapp.html';
             return;
           }
+          // Otherwise stay here so user can enter invite code or sign in
         } catch {}
       })();
 
