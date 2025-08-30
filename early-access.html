@@ -7,12 +7,7 @@
     <meta name="description" content="Request early access to IDOLL and enter your invite code to start using the web app." />
     <link rel="icon" href="/static/favicon.ico" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase config: paste your project URL and anon key below -->
-    <script>
-      // Replace these with your actual Supabase project URL and anon public key
-      window.SUPABASE_URL = window.SUPABASE_URL || 'https://xttiepbeyfggzapzqyba.supabase.co';
-      window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dGllcGJleWZnZ3phcHpxeWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1MTY4NzUsImV4cCI6MjA3MjA5Mjg3NX0.VC01eM66OFlJlRiZNasyaJWRb3rjqnzHgW2y9lN_U4Q';
-    </script>
+    
     <script>
       tailwind.config = {
         theme: {
@@ -33,10 +28,27 @@
     </style>
   </head>
   <body class="bg-aurora text-white min-h-screen">
+    <script>
+      // Configure API and WS base for cross-origin use
+      window.IDOLL_API_BASE = 'https://idoll.ngrok.app/api';
+      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
+    </script>
+    <script>
+      // Warn if Google client ID is not configured on API
+      (async () => {
+        try {
+          const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
+          const res = await fetch(base + '/auth/google/client-id', { credentials: 'include' });
+          if (!res.ok) return;
+          const { client_id } = await res.json();
+          if (!client_id) console.warn('[IDOLL] GOOGLE_CLIENT_ID is not set on API. Google button disabled.');
+        } catch {}
+      })();
+    </script>
     <header class="max-w-4xl mx-auto px-5 pt-5">
       <div class="glass rounded-2xl px-4 py-3 flex items-center justify-between">
         <a href="/" class="inline-flex items-center gap-3">
-          <img src="./src/logo-white.png" alt="IDOLL" class="h-8 w-auto" />
+          <img src="./static/images/logo-white.png" alt="IDOLL" class="h-8 w-auto" />
           <span class="sr-only">IDOLL</span>
         </a>
         <nav class="text-sm text-white/70 hidden sm:flex gap-6">
@@ -54,7 +66,7 @@
             Early Access • Private Beta
           </span>
           <h1 class="mt-4 text-4xl sm:text-5xl font-black leading-tight">Be first to meet IDOLL</h1>
-          <p class="mt-4 text-white/80">Sign in with email or Google to check your Early Access status. If you have an invite code, you can enter it below to unlock immediately.</p>
+          <p class="mt-4 text-white/80">Enter your email and invite code to unlock Early Access. We’ll set a secure session on this device and take you to the app.</p>
 
           <div class="mt-6 flex flex-wrap gap-3">
             <a href="/index.html#join" class="inline-flex items-center rounded-full bg-white text-ink px-5 py-3 font-medium hover:opacity-95">Request access</a>
@@ -63,33 +75,18 @@
 
           <div class="mt-8 text-xs text-white/60">Problems with your code? Email support@idoll.love with your invite ID.</div>
 
-          <!-- Auth Box -->
-          <div class="mt-8 glass rounded-2xl p-5">
-            <h2 class="text-xl font-semibold">Sign in</h2>
-            <p class="text-sm text-white/70 mt-1">Use Google or get a magic link by email.</p>
-            <div id="auth-status" class="hidden text-emerald-300 text-sm mt-2"></div>
-
-            <div class="mt-4 flex flex-col gap-3">
-              <button id="google-signin" class="inline-flex items-center justify-center gap-2 rounded-full bg-white text-ink px-4 py-2.5 font-medium hover:opacity-95">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-5 w-5" />
-                Continue with Google
-              </button>
-
-              <form id="email-form" class="flex gap-2">
-                <input id="magic-email" type="email" required placeholder="you@example.com" class="flex-1 rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/40" />
-                <button type="submit" class="rounded-xl bg-white text-ink px-4 py-2 font-medium hover:opacity-95">Email me a link</button>
-              </form>
-              <div id="email-msg" class="text-xs text-white/70"></div>
-              <div id="pending-msg" class="hidden text-sm text-white/80">Signed in but not approved yet. If you have an invite code, enter it below. Otherwise you’ll be notified when your access is ready.</div>
-            </div>
-          </div>
+          
         </div>
 
         <div id="invite" class="glass rounded-2xl p-5">
           <h2 class="text-xl font-semibold">Enter invite code</h2>
           <p class="text-sm text-white/70 mt-1">Use the code from your email to unlock the web app.</p>
           <div id="already-approved" class="hidden mt-3 text-emerald-300 text-sm">
-            Access already granted on this device. <a href="./templates/webapp.html" class="underline">Continue to IDOLL</a>.
+            Access already granted on this device. <a href="./webapp.html" class="underline">Continue to IDOLL</a>.
+          </div>
+          <div class="mt-3">
+            <div id="google-btn"></div>
+            <p class="text-xs text-white/50 mt-2">Sign in with Google to autofill your email and speed up access.</p>
           </div>
           <form id="invite-form" class="mt-4 space-y-3">
             <div>
@@ -115,7 +112,7 @@
       </section>
     </main>
 
-    <script type="module" src="./static/js/early_access.js"></script>
+    <script src="./static/js/auth_client.js"></script>
     <script>
       // Auto show error if redirected from denied
       const params = new URLSearchParams(location.search);

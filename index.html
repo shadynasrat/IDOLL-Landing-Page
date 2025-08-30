@@ -421,11 +421,16 @@
     </style>
   </head>
   <body class="bg-aurora text-white">
+    <script>
+      // Point frontend to your API and WS (adjust if you change domains)
+      window.IDOLL_API_BASE = 'https://idoll.ngrok.app/api';
+      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
+    </script>
     <!-- Header -->
     <header class="max-w-6xl mx-auto px-5 pt-4 top-0 z-50">
         <div class="glass bg-white/5 border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between">
           <a href="#" class="inline-flex items-center gap-3">
-            <img src="./src/logo-white.png" alt="IDOLL" class="h-8 w-auto" />
+            <img src="./static/images/logo-white.png" alt="IDOLL" class="h-8 w-auto" />
             <span class="sr-only">IDOLL</span>
           </a>
         <nav class="text-sm text-white/70 hidden sm:flex gap-8 justify-self-end">
@@ -474,7 +479,7 @@
             
             <!-- Robot Silhouette -->
             <div class="relative z-20"></div>
-              <img src="./src/robot-silhouette.png" alt="IDOLL Robot - Coming Soon" class="robot-silhouette h-96 w-auto mx-auto" />
+              <img src="./static/images/robot-silhouette.png" alt="IDOLL Robot - Coming Soon" class="robot-silhouette h-96 w-auto mx-auto" />
             </div>
             
                 <!-- Mystery Elements -->
@@ -516,7 +521,7 @@
 
     <section id="features" class="mt-[10rem]">
         <div class="text-center mb-12">
-          <img src="./src/logo-white.png" alt="IDOLL" class="mx-auto mb-6 h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+          <img src="./static/images/logo-white.png" alt="IDOLL" class="mx-auto mb-6 h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
           <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent mb-4">
             Why choose IDOLL?
           </h2>
@@ -553,15 +558,6 @@
         </div>
       </section>
 
-      <!-- Alt: Google Form Embed (optional) -->
-      <section id="google-form" class="mt-14 hidden">
-        <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
-          <!-- Replace the src with your Google Form's embed link -->
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf-placeholder/viewform?embedded=true" width="100%" height="720" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-        </div>
-        <p class="mt-2 text-xs text-white/60">Tip: In Google Forms, use <em>Send → Embed</em> and paste the link above.</p>
-      </section>
-
 
             <!-- Waitlist -->
       <section id="join" class="max-w-3xl mx-auto px-5 py-10 mt-[10rem]">
@@ -574,6 +570,10 @@
           <p class="hidden">
             <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
           </p>
+          <div class="flex items-center justify-center">
+            <div id="waitlist-google-btn"></div>
+          </div>
+          <p class="text-xs text-white/50 text-center -mt-2">Use Google to autofill your info.</p>
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
               <label for="firstName" class="block text-sm text-white/70 mb-1">First name</label>
@@ -638,7 +638,7 @@
       <footer class="mt-20 pb-10">
         <div class="hairline mb-10"></div>
         <div class="max-w-6xl mx-auto px-5 text-center">
-          <img src="./src/logo-white.png" alt="IDOLL" class="mx-auto h-8 w-auto opacity-80" />
+          <img src="./static/images/logo-white.png" alt="IDOLL" class="mx-auto h-8 w-auto opacity-80" />
           <p class="mt-3 text-white/60 text-sm">© <span id="year"></span> IDOLL Robotics. All rights reserved.</p>
         </div>
       </footer>
@@ -734,6 +734,61 @@
       
       // Initialize dropdowns when page loads
       document.addEventListener('DOMContentLoaded', initDropdowns);
+
+      // Optional: Google Sign-In to prefill waitlist form
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          let client_id = window.IDOLL_GOOGLE_CLIENT_ID || null;
+          if (!client_id) {
+            const resp = await fetch((window.IDOLL_API_BASE || '/api').replace(/\/$/,'') + '/auth/google/client-id', { credentials: 'include' });
+            if (!resp.ok) throw new Error('client-id fetch failed: ' + resp.status);
+            ({ client_id } = await resp.json());
+          }
+          if (!client_id) {
+            console.warn('[IDOLL] GOOGLE_CLIENT_ID is not set on API. Google button disabled.');
+            return;
+          }
+          const s = document.createElement('script');
+          s.src = 'https://accounts.google.com/gsi/client';
+          s.async = true;
+          s.defer = true;
+          s.onload = () => {
+            window.google?.accounts.id.initialize({
+              client_id,
+              callback: (response) => {
+                window.idollGoogleToken = response.credential;
+                try {
+                  const parts = response.credential.split('.');
+                  const payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+                  const email = payload.email || '';
+                  const name = payload.name || '';
+                  const givenName = (name.split(' ')[0] || name).trim();
+                  const locale = payload.locale || '';
+                  const countryGuess = (locale.includes('-') ? locale.split('-')[1] : locale).toUpperCase();
+                  const f = document.getElementById('firstName');
+                  const e = document.getElementById('email');
+                  const c = document.getElementById('country');
+                  if (givenName && f && !f.value) f.value = givenName;
+                  if (email && e) { e.value = email; e.readOnly = true; }
+                  if (countryGuess && c && !c.value) c.value = countryGuess;
+                } catch {}
+                // Create a session on server (optional)
+                fetch((window.IDOLL_API_BASE || '/api').replace(/\/$/,'') + '/auth/google/verify', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  credentials: 'include',
+                  body: JSON.stringify({ idToken: window.idollGoogleToken })
+                }).catch(()=>{});
+              }
+            });
+            const btn = document.getElementById('waitlist-google-btn');
+            if (btn) window.google.accounts.id.renderButton(btn, { theme: 'outline', size: 'large', shape: 'pill' });
+          };
+          document.head.appendChild(s);
+        } catch (e) {
+          console.warn('[IDOLL] Google Sign-In bootstrap failed:', e);
+        }
+      });
     </script>
   </body>
 </html>
