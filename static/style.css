@@ -321,12 +321,15 @@ h6{
     box-shadow:0 0 10px rgba(0,0,0,.2);
     height:100vh;
     left:-250px;
-    overflow-y:auto;
     position:fixed;
     top:0;
     transition:left .3s ease;
     width:250px;
-    z-index:99999}
+    z-index:99999;
+    display:flex;
+    flex-direction:column;
+    overflow-x:hidden;
+    overflow-y:hidden}
     
     .mobile-menu.active{
     left:0}
@@ -359,13 +362,28 @@ h6{
     .mobile-menu-sections{
     background-color:var(--card-bg-dark-extra);
     color:var(--text-muted);
-    height:100%;
-    padding:20px;
-    position:fixed;
-    transition:left .3s ease;
-    width:250px;
+    padding:12px;
+    position:relative;
     z-index:1000;
-    overflow-y: auto; /* Allow vertical scrolling */
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    overflow-x:hidden;
+    }
+
+    /* Only the conversations list scrolls */
+    #mobile-conversations-list{
+        flex:1;
+        overflow-y:auto;
+        overflow-x:hidden;
+        min-height:0;
+    }
+
+    /* Footer user menu at bottom of left tab */
+    .user-menu-footer{
+        flex-shrink:0;
+        margin-top:10px;
     }
     
     .mobile-section-header{
@@ -1262,7 +1280,8 @@ h6{
     width:250px}
     
     .mobile-menu-sections{
-    width:250px}
+    width:250px;
+    padding:12px}
     
     .side-tab{
     right:-100%;

@@ -125,10 +125,17 @@
           const base = (window.IDOLL_API_BASE || '/api').replace(/\/$/, '');
           const res = await fetch(base + '/auth/session', { credentials: 'include' });
           const sess = await res.json();
+          const params = new URLSearchParams(location.search);
+          const isLogout = params.has('logout');
           // If signed in (any role), go to webapp; it will handle invite code gating
-          if (sess && sess.authenticated) {
+          // Skip auto-redirect when returning from logout
+          if (!isLogout && sess && sess.authenticated) {
             window.location.href = '/webapp.html';
             return;
+          }
+          if (isLogout && sess && sess.authenticated) {
+            // Ensure server-side logout if cookie still present
+            try { await fetch(base + '/auth/logout', { method: 'POST', credentials: 'include' }); } catch {}
           }
         } catch {}
       })();
