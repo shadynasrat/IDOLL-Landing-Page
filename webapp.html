@@ -18,26 +18,7 @@
     <link rel="icon" href="/static/idoll_avatar.png" type="image/x-icon">
 </head>
 <body class="dark-theme bg-night text-white">
-    <script>
-      // Ensure API base and WS URL are configured when hosting separately
-      (function(){
-        const host = location.hostname;
-        if (!window.IDOLL_API_BASE) {
-          if (host.includes('ngrok.app')) {
-            window.IDOLL_API_BASE = 'https://api-idoll.ngrok.app/api';
-          } else {
-            window.IDOLL_API_BASE = '/api';
-          }
-        }
-        if (!window.IDOLL_WS) {
-          if (host.includes('ngrok.app')) {
-            window.IDOLL_WS = 'wss://api-idoll.ngrok.app/ws';
-          } else {
-            window.IDOLL_WS = location.origin.replace(/^http/, 'ws') + '/ws';
-          }
-        }
-      })();
-    </script>
+    <script type="module" src="./static/js/config.js"></script>
     <div class="layout-container">
         <div class="chat-container">
             <!-- Header -->
@@ -47,7 +28,7 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="header-logo">
-                        <img src="/static/IDOLL_logo_white.png" alt="IDOLL" class="header-logo-img">
+                        <img src="/static/images/IDOLL_logo_white.png" alt="IDOLL" class="header-logo-img">
                     </div>
                 </div>
                 <div class="chat-actions">

@@ -1,4 +1,4 @@
-import { setupMobileMenu, setupMobileChatInterface, createNewChat } from './uiUtils.js';
+import { setupMobileMenu, setupMobileChatInterface, createNewChat, scrollToLastMessage } from './uiUtils.js';
 // import { setupCallButton } from './callUtils.js';
 
 
@@ -156,14 +156,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   setTimeout(initChatUI, 0);
 } else {
   window.addEventListener('load', initChatUI);
-}
-
-// Function to scroll to the last message in the chat container
-export function scrollToLastMessage() {
-    const container = document.getElementById('conversation-container');
-    if (!container) return;
-    // Scroll to bottom smoothly
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 }
 
 // Ensure scrollToLastMessage is called after new messages are added

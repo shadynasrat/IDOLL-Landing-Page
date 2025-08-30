@@ -2,7 +2,7 @@ import { appendTempMessage, appendAssistantMessageContainer, showErrorNotificati
 import { scrollToLastMessage } from './chat.js';
 import { createChatOnServer } from './uiUtils.js';
 import { upsertConversationSummary, removeConversationSummary, switchToChat } from './conversation.js';
-import { handleAudioPlaybackComplete, setCurrentAudioElement } from './audio_helpers.js';
+import { playAudioFromBase64, clearAudioQueue } from './ws/audioStream.js';
 import { markdownToHtml, renderButtons } from './renderHelpers.js';
 
 // WebSocket connection management
@@ -704,131 +704,6 @@ async function saveMessage(role, content) {
     } catch (err) {
         console.error('Could not reach save_message API:', err);
     }
-}
-
-let audioQueue = [];
-let isPlayingAudio = false;
-
-// Modified audio playback function with queueing
-function playAudioFromBase64(base64Audio) {
-    console.log('Queuing audio chunk, data length:', base64Audio.length);
-    
-    // Add the audio chunk to the queue
-    audioQueue.push(base64Audio);
-    
-    // Start processing the queue if not already playing
-    if (!isPlayingAudio) {
-        processAudioQueue();
-    }
-}
-
-// Process audio queue sequentially
-function processAudioQueue() {
-    if (audioQueue.length === 0) {
-        isPlayingAudio = false;
-        console.log('Audio queue empty, playback finished');
-        // Notify audio helpers that playback is complete
-        handleAudioPlaybackComplete();
-        return;
-    }
-    
-    isPlayingAudio = true;
-    const base64Audio = audioQueue.shift(); // Get first chunk from queue
-    
-    console.log('Playing audio chunk, remaining in queue:', audioQueue.length);
-    
-    try {
-        // Decode base64 to get raw PCM bytes
-        const binaryString = atob(base64Audio);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        
-        // Audio configuration - match your Python settings
-        const sampleRate = 24000; // Adjust to match your Python sample_rate
-        const channels = 1; // Adjust to match your Python channels
-        
-        // Create AudioContext for playing raw PCM data
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Convert bytes to Float32Array for Web Audio API
-        const audioBuffer = audioCtx.createBuffer(channels, bytes.length / 2, sampleRate);
-        const channelData = audioBuffer.getChannelData(0);
-        
-        // Convert 16-bit PCM to float values (-1.0 to 1.0)
-        for (let i = 0; i < bytes.length; i += 2) {
-            const sample = (bytes[i] | (bytes[i + 1] << 8));
-            // Convert from signed 16-bit to signed value
-            const signedSample = sample > 32767 ? sample - 65536 : sample;
-            channelData[i / 2] = signedSample / 32768.0;
-        }
-        
-        // Create audio source and play
-        const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioCtx.destination);
-        
-        // Create a mock audio element for compatibility with audio helpers
-        const mockAudioElement = {
-            addEventListener: function(event, callback) {
-                if (event === 'ended') {
-                    source.onended = callback;
-                }
-            },
-            currentTime: 0,
-            duration: audioBuffer.duration
-        };
-        
-        // Register this audio element with audio helpers
-        setCurrentAudioElement(mockAudioElement);
-        
-        source.onended = () => {
-            console.log('Audio chunk completed, processing next in queue');
-            // Process next chunk in queue when current one finishes
-            processAudioQueue();
-        };
-        
-        source.start(0);
-        console.log('Audio chunk playing via Web Audio API');
-        
-    } catch (error) {
-        console.error('Audio playback error:', error);
-        
-        // Fallback: try as WAV in case the data format changes
-        const audio = new Audio(`data:audio/wav;base64,${base64Audio}`);
-        
-        // Register this audio element with audio helpers
-        setCurrentAudioElement(audio);
-        
-        audio.oncanplaythrough = () => {
-            console.log('Audio loaded successfully via fallback data URL');
-            audio.play().catch(e => {
-                console.error('Fallback audio play failed:', e);
-                // Continue with next chunk even if this one fails
-                processAudioQueue();
-            });
-        };
-        audio.onended = () => {
-            console.log('Fallback audio chunk completed');
-            // Process next chunk when fallback audio finishes
-            processAudioQueue();
-        };
-        audio.onerror = (e) => {
-            console.error('Audio chunk failed, skipping to next:', e);
-            // Skip to next chunk if this one fails
-            processAudioQueue();
-        };
-    }
-}
-
-// Optional: Function to clear audio queue (useful for interrupting playback)
-function clearAudioQueue() {
-    audioQueue = [];
-    isPlayingAudio = false;
-    // Notify audio helpers that playback stopped
-    handleAudioPlaybackComplete();
-    console.log('Audio queue cleared');
 }
 
 // Make clearAudioQueue available globally for audio_helpers.js

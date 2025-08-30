@@ -1,4 +1,4 @@
-import { scrollToLastMessage } from './chat.js';
+import { scrollToLastMessage } from './uiUtils.js';
 
 // Theme handling
 function setTheme(themeName) {
@@ -191,4 +191,3 @@ function renderStreamingText(contentElement, accumulatedText, previousLength) {
         fadeInSpan.style.opacity = '1';
     });
 }
-

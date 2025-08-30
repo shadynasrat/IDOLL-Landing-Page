@@ -28,11 +28,7 @@
     </style>
   </head>
   <body class="bg-aurora text-white min-h-screen">
-    <script>
-      // Configure API and WS base for cross-origin use (align with server settings)
-      window.IDOLL_API_BASE = 'https://idoll.ngrok.app/api';
-      window.IDOLL_WS = 'wss://idoll.ngrok.app/ws';
-    </script>
+    <script type="module" src="./static/js/config.js"></script>
     <script>
       // Warn if Google client ID is not configured on API
       (async () => {
